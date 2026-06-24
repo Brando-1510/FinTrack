@@ -1,0 +1,29 @@
+# Ignorar dependencias y paquetes
+node_modules/
+vendor/
+composer.phar
+
+# Ignorar archivos de configuración del entorno y secretos
+.env
+.env.local
+.env.*.local
+
+# Ignorar compilaciones y resultados de compilación
+build/
+dist/
+out/
+*.bundle.js
+*.min.js
+
+# Ignorar archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Ignorar reportes de cobertura y registros
+coverage/
+*.log
+
+# Ignorar carpetas de editores e IDEs
+.idea/
+.vscode/
+*.sublime-workspace
