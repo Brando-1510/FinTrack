@@ -59,6 +59,10 @@
     .grupo-boton-eliminar {
         display: none !important;
     }
+
+    .celda-acciones button{
+        gap: 1rem;
+    }
     
     /* Ocultar botones de restablecer */
     #boton-restablecer,

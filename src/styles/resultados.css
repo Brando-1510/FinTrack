@@ -1,297 +1,641 @@
-/**
- * =============================================================================
- * resultados.css - Estilos específicos de la página Resultados
- * =============================================================================
- * 
- * Este archivo complementa a principal.css con estilos exclusivos para
- * la página resultados.html: balanza de comprobación, análisis de la
- * operación paso a paso, y contenedores de gráficos con Canvas.
- */
+/* =========================================================
+   RESULTADOS.CSS
+   Estilos específicos para resultados.html.
+   Reutiliza principal.css + index.css.
+========================================================= */
 
-/* =============================================================================
-   BALANZA DE COMPROBACIÓN
-   ============================================================================= */
-
-/* Indicador de estado de la balanza */
-#indicador-balanza {
-    font-size: var(--tamano-pequeno);
-    padding: 6px 16px;
-    border-radius: 20px;
+.resultados-main {
+    margin-top: 0;
+    padding: calc(4.5rem + 2.4rem) 1rem 3rem;
 }
 
-/* Tabla de balanza: anchos de columna */
-#tabla-balanza th:nth-child(1),
-#tabla-balanza td:nth-child(1) {
-    min-width: 180px;
+.resultados-container {
+    width: min(100%, 1180px);
+    max-width: 1180px;
+    margin-inline: auto;
 }
 
-#tabla-balanza th:nth-child(2),
-#tabla-balanza td:nth-child(2),
-#tabla-balanza th:nth-child(3),
-#tabla-balanza td:nth-child(3),
-#tabla-balanza th:nth-child(4),
-#tabla-balanza td:nth-child(4),
-#tabla-balanza th:nth-child(5),
-#tabla-balanza td:nth-child(5) {
-    width: 140px;
-    text-align: right;
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.resultados-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 18rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+    align-items: end;
+    gap: 2rem;
+    margin-bottom: 1.6rem;
+    padding: clamp(2rem, 5vw, 4rem);
+    border-radius: var(--ft-radius-xl);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background:
+        radial-gradient(circle at 88% 20%, rgba(5, 150, 105, 0.42), transparent 14rem),
+        radial-gradient(circle at 0% 100%, rgba(109, 93, 242, 0.50), transparent 18rem),
+        linear-gradient(135deg, var(--ft-purple-800), var(--ft-purple-900));
+    color: var(--ft-white);
+    text-align: left;
+    box-shadow: var(--ft-shadow-lg);
 }
 
-/* Fila de totales en el pie de la balanza */
-#pie-tabla-balanza .fila-totales {
-    background-color: var(--color-principal) !important;
-    color: white;
+.resultados-hero::before {
+    content: "";
+    position: absolute;
+    right: -5rem;
+    bottom: -6rem;
+    width: 17rem;
+    height: 17rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
 }
 
-#pie-tabla-balanza .fila-totales td {
+.resultados-hero__content {
+    position: relative;
+    z-index: 1;
+}
+
+.resultados-hero__eyebrow {
+    width: fit-content;
+    display: inline-flex;
+    margin-bottom: 1rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    border: 3px solid var(--ft-green-600);
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+}
+
+.resultados-hero__title {
+    max-width: 760px;
+    margin-bottom: 0.75rem;
+    color: var(--ft-white);
+    font-size: clamp(2.4rem, 6vw, 4.7rem);
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: -0.08em;
+}
+
+.resultados-hero__subtitle {
+    max-width: 760px;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: clamp(1rem, 1.6vw, 1.22rem);
+    line-height: 1.55;
+}
+
+.resultados-hero__panel {
+    position: relative;
+    z-index: 1;
+    padding: 1.45rem;
+    border-radius: var(--ft-radius-lg);
+    background: rgba(3, 3, 3, 0.18);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.resultados-hero__panel-label {
+    color: rgba(255, 255, 255, 0.66);
+    font-size: 0.75rem;
     font-weight: 700;
-    font-size: 16px;
-    padding: 14px var(--espaciado-medio);
 }
 
-/* =============================================================================
-   ANÁLISIS DE LA OPERACIÓN
-   ============================================================================= */
+.resultados-hero__panel-title {
+    display: block;
+    margin-block: 0.25rem;
+    color: var(--ft-white);
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
 
-/* Contenedor principal del análisis */
-.contenedor-analisis {
+.resultados-hero__panel-text {
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 0.85rem;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.resultados-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.35rem;
+    align-items: start;
+}
+
+.resultados-card {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0;
+    padding: clamp(1.25rem, 2vw, 1.7rem);
+    border: 1px solid rgba(59, 34, 114, 0.08);
+    border-radius: var(--ft-radius-lg);
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: var(--ft-shadow-sm);
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.resultados-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(109, 93, 242, 0.22);
+    box-shadow: var(--ft-shadow-md);
+}
+
+
+/* =========================================================
+   HEADERS DE SECCIÓN
+========================================================= */
+
+.resultados-section-header {
     display: flex;
-    flex-direction: column;
-    gap: 16px;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
-/* Cada paso del análisis */
+.resultados-section-header__content {
+    min-width: 0;
+}
+
+.resultados-section-header__eyebrow {
+    display: inline-flex;
+    margin-bottom: 0.4rem;
+    padding: 0.28rem 0.7rem;
+    border-radius: 999px;
+    background: var(--ft-purple-100);
+    color: var(--ft-purple-800);
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.resultados-section-header__title {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: var(--ft-purple-800);
+    font-size: clamp(1.18rem, 2vw, 1.45rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.045em;
+}
+
+.resultados-section-header__title::before {
+    display: none;
+}
+
+.resultados-section-text {
+    max-width: 920px;
+    margin-bottom: 1rem;
+    color: var(--ft-gray-500);
+    font-size: 0.86rem;
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   STATUS BALANZA
+========================================================= */
+
+.resultados-status {
+    min-height: 2.35rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 0.85rem;
+    border-radius: 999px;
+    background: var(--ft-green-100);
+    color: var(--ft-green-700);
+    font-size: 0.78rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   TABLA BALANZA
+========================================================= */
+
+.resultados-table-wrapper {
+    margin: 0;
+    border: 1px solid rgba(59, 34, 114, 0.08);
+    border-radius: var(--ft-radius-md);
+    background: #FFFFFF;
+    overflow-x: auto;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.80);
+}
+
+.resultados-table {
+    width: 100%;
+    min-width: 820px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: transparent;
+    font-size: 0.84rem;
+}
+
+.resultados-table thead {
+    background: linear-gradient(135deg, var(--ft-purple-800), var(--ft-purple-900));
+    color: var(--ft-white);
+}
+
+.resultados-table th {
+    padding: 0.9rem 1rem;
+    text-align: left;
+    color: var(--ft-white);
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.resultados-table th:first-child {
+    border-top-left-radius: var(--ft-radius-md);
+}
+
+.resultados-table th:last-child {
+    border-top-right-radius: var(--ft-radius-md);
+}
+
+.resultados-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--ft-gray-200);
+    color: var(--ft-gray-700);
+    vertical-align: middle;
+}
+
+.resultados-table tbody tr {
+    background: #FFFFFF;
+    transition: background 160ms ease;
+}
+
+.resultados-table tbody tr:nth-child(even) {
+    background: #FAFAFC;
+}
+
+.resultados-table tbody tr:hover {
+    background: #F6F3FF;
+}
+
+.resultados-table tfoot {
+    background: #F6F3FF;
+}
+
+.resultados-table tfoot td {
+    color: var(--ft-green-700);
+    font-weight: 800;
+    background: rgba(5, 150, 105, 0.065);
+}
+
+.resultados-table td:nth-child(1) {
+    color: var(--ft-purple-800);
+    font-weight: 900;
+    background: rgba(109, 93, 242, 0.07);
+}
+
+.resultados-table td:nth-child(4) {
+    color: var(--ft-red-600);
+    font-weight: 900;
+}
+
+.resultados-table td:nth-child(5) {
+    color: var(--ft-green-700);
+    font-weight: 900;
+
+}
+
+
+
+/* =========================================================
+   ANÁLISIS
+========================================================= */
+/* =========================================================
+   ANÁLISIS DE LA OPERACIÓN
+   Estilo tipo tarjetas ejecutivas, no texto plano.
+========================================================= */
+
+.resultados-analysis {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+/* Card de cada paso generado por JS */
 .paso-analisis {
-    padding: 20px 24px;
-    border-radius: var(--radio-borde-medio);
-    border-left: 4px solid var(--color-principal);
-    background-color: #f8f9fa;
-    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    padding: 1.15rem;
+    border: 1px solid rgba(59, 34, 114, 0.10);
+    border-radius: var(--ft-radius-md);
+    background:
+        radial-gradient(circle at 100% 0%, rgba(109, 93, 242, 0.10), transparent 9rem),
+        #ffffff;
+    box-shadow: 0 10px 26px rgba(46, 16, 101, 0.06);
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
 .paso-analisis:hover {
-    box-shadow: var(--sombra-suave);
-    transform: translateX(4px);
+    transform: translateY(-2px);
+    border-color: rgba(109, 93, 242, 0.24);
+    box-shadow: 0 16px 36px rgba(46, 16, 101, 0.11);
 }
 
-/* Título de cada paso */
+/* Línea lateral de identidad */
+.paso-analisis::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0.32rem;
+    background: var(--ft-purple-800);
+}
+
+/* Variantes según tipo de paso */
+.paso-ingreso::before,
+.paso-ganancia::before {
+    background: var(--ft-green-600);
+}
+
+.paso-costo::before,
+.paso-perdida::before {
+    background: var(--ft-red-600);
+}
+
+.paso-inventario::before {
+    background: var(--ft-orange-500);
+}
+
+/* Título del paso */
 .titulo-paso {
-    margin: 0 0 10px 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--color-principal);
+    margin: 0 0 0.75rem;
+    padding-left: 0.25rem;
+    color: var(--ft-purple-800);
+    font-size: 1rem;
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: -0.035em;
 }
 
-/* Fórmula del paso */
-.formula-paso {
-    margin: 0 0 6px 0;
-    font-size: var(--tamano-pequeno);
-    color: var(--texto-secundario);
+.paso-ingreso .titulo-paso,
+.paso-ganancia .titulo-paso {
+    color: var(--ft-green-700);
 }
 
-/* Cálculo detallado del paso */
+.paso-costo .titulo-paso,
+.paso-perdida .titulo-paso {
+    color: var(--ft-red-600);
+}
+
+.paso-inventario .titulo-paso {
+    color: #B45309;
+}
+
+/* Fórmula y cálculo */
+.formula-paso,
 .calculo-paso {
-    margin: 0 0 12px 0;
-    font-size: var(--tamano-texto);
-    color: var(--texto-principal);
-    font-family: 'Courier New', monospace;
+    margin: 0;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid rgba(59, 34, 114, 0.08);
+    background: #FAFAFC;
+    color: var(--ft-gray-700);
+    font-size: 0.84rem;
+    line-height: 1.55;
 }
 
-/* Contenedor del resultado */
+.formula-paso {
+    border-radius: var(--ft-radius-sm) var(--ft-radius-sm) 0 0;
+}
+
+.calculo-paso {
+    border-top: 0;
+    border-radius: 0 0 var(--ft-radius-sm) var(--ft-radius-sm);
+}
+
+.formula-paso strong,
+.calculo-paso strong {
+    color: var(--ft-purple-800);
+    font-weight: 900;
+}
+
+/* Resultado destacado */
 .resultado-paso {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 12px;
-    border-top: 1px dashed var(--color-borde);
+    gap: 1rem;
+    margin-top: 0.85rem;
+    padding: 0.85rem 0.95rem;
+    border-radius: var(--ft-radius-sm);
+    background: var(--ft-purple-100);
 }
 
-/* Etiqueta del resultado */
 .etiqueta-resultado {
-    font-size: var(--tamano-pequeno);
-    font-weight: 500;
-    color: var(--texto-secundario);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    color: var(--ft-purple-800);
+    font-size: 0.78rem;
+    font-weight: 900;
 }
 
-/* Valor numérico del resultado */
 .valor-resultado {
-    font-family: 'Courier New', monospace;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--color-principal);
+    color: var(--ft-purple-900);
+    font-size: 1rem;
+    font-weight: 900;
+    white-space: nowrap;
 }
 
-/* Colores específicos por tipo de paso */
-
-/* Paso de ingreso: verde */
-.paso-ingreso {
-    border-left-color: var(--color-haber);
-    background-color: rgba(39, 174, 96, 0.05);
+/* Resultado por tipo */
+.paso-ingreso .resultado-paso,
+.paso-ganancia .resultado-paso {
+    background: rgba(5, 150, 105, 0.12);
 }
 
-.paso-ingreso .titulo-paso {
-    color: #1e8449;
-}
-
-.paso-ingreso .valor-resultado {
-    color: var(--color-haber);
-}
-
-/* Paso de costo: rojo suave */
-.paso-costo {
-    border-left-color: var(--color-debe);
-    background-color: rgba(192, 57, 43, 0.05);
-}
-
-.paso-costo .titulo-paso {
-    color: #922b21;
-}
-
-.paso-costo .valor-resultado {
-    color: var(--color-debe);
-}
-
-/* Paso de inventario: azul */
-.paso-inventario {
-    border-left-color: var(--color-principal);
-    background-color: rgba(26, 82, 118, 0.05);
-}
-
-/* Paso de ganancia: verde brillante */
-.paso-ganancia {
-    border-left-color: var(--color-exito);
-    background-color: rgba(46, 204, 113, 0.08);
-    border-left-width: 6px;
-}
-
-.paso-ganancia .titulo-paso {
-    color: #1e8449;
-    font-size: 20px;
-}
-
+.paso-ingreso .etiqueta-resultado,
+.paso-ingreso .valor-resultado,
+.paso-ganancia .etiqueta-resultado,
 .paso-ganancia .valor-resultado {
-    color: var(--color-exito);
-    font-size: 26px;
+    color: var(--ft-green-700);
 }
 
-/* Paso de pérdida: rojo */
-.paso-perdida {
-    border-left-color: var(--color-error);
-    background-color: rgba(231, 76, 60, 0.08);
-    border-left-width: 6px;
+.paso-costo .resultado-paso,
+.paso-perdida .resultado-paso {
+    background: rgba(220, 38, 38, 0.10);
 }
 
-.paso-perdida .titulo-paso {
-    color: #c0392b;
-    font-size: 20px;
-}
-
+.paso-costo .etiqueta-resultado,
+.paso-costo .valor-resultado,
+.paso-perdida .etiqueta-resultado,
 .paso-perdida .valor-resultado {
-    color: var(--color-error);
-    font-size: 26px;
+    color: var(--ft-red-600);
 }
 
-/* =============================================================================
+.paso-inventario .resultado-paso {
+    background: rgba(245, 158, 11, 0.14);
+}
+
+.paso-inventario .etiqueta-resultado,
+.paso-inventario .valor-resultado {
+    color: #B45309;
+}
+
+/* =========================================================
    GRÁFICOS
-   ============================================================================= */
+========================================================= */
 
-/* Grid de contenedores de gráficos */
-.grid-graficos {
+.resultados-charts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 24px;
-    margin-top: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
 }
 
-/* Contenedor individual de cada gráfico */
-.contenedor-grafico {
-    background-color: #f8f9fa;
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radio-borde-medio);
-    padding: 20px;
-    text-align: center;
-    transition: box-shadow 0.2s ease;
+.resultados-chart-card {
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid rgba(59, 34, 114, 0.08);
+    border-radius: var(--ft-radius-md);
+    background:
+        radial-gradient(circle at 100% 0%, rgba(109, 93, 242, 0.10), transparent 9rem),
+        #FAFAFC;
+    box-shadow: 0 10px 24px rgba(46, 16, 101, 0.06);
 }
 
-.contenedor-grafico:hover {
-    box-shadow: var(--sombra-suave);
+.resultados-chart-card__title {
+    margin-bottom: 0.85rem;
+    color: var(--ft-purple-800);
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.035em;
 }
 
-/* Título de cada gráfico */
-.titulo-grafico {
-    margin: 0 0 16px 0;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--color-principal);
-}
-
-/* Elemento canvas del gráfico */
-.canvas-grafico {
+.resultados-chart-card__canvas {
     width: 100%;
-    max-width: 500px;
+    max-width: 100%;
     height: auto;
-    border-radius: var(--radio-borde-pequeno);
-    background-color: white;
+    display: block;
+    border: 1px solid var(--ft-gray-200);
+    border-radius: var(--ft-radius-sm);
+    background: #FFFFFF;
 }
 
-/* Descripción debajo del gráfico */
-.descripcion-grafico {
-    margin: 12px 0 0 0;
-    font-size: var(--tamano-pequeno);
-    color: var(--texto-secundario);
-    font-style: italic;
+.resultados-chart-card__description {
+    margin-top: 0.75rem;
+    color: var(--ft-gray-500);
+    font-size: 0.78rem;
+    line-height: 1.5;
 }
 
-/* =============================================================================
-   RESPONSIVE - PANTALLAS PEQUEÑAS
-   ============================================================================= */
 
-@media screen and (max-width: 768px) {
-    
-    /* Balanza: tabla compacta */
-    #tabla-balanza {
-        font-size: var(--tamano-pequeno);
-    }
-    
-    #tabla-balanza th,
-    #tabla-balanza td {
-        padding: 8px;
-    }
-    
-    /* Análisis: padding reducido */
-    .paso-analisis {
-        padding: 16px;
-    }
-    
-    .titulo-paso {
-        font-size: 16px;
-    }
-    
-    .calculo-paso {
-        font-size: var(--tamano-pequeno);
-    }
-    
-    .valor-resultado {
-        font-size: 18px;
-    }
-    
-    .paso-ganancia .valor-resultado,
-    .paso-perdida .valor-resultado {
-        font-size: 22px;
-    }
-    
-    /* Gráficos: una sola columna */
-    .grid-graficos {
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.resultados-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0.65rem 1rem;
+    border: 0;
+    border-radius: 999px;
+    font-family: var(--ft-font);
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.resultados-button:hover {
+    transform: translateY(-2px);
+}
+
+.resultados-button--neutral {
+    background: var(--ft-gray-950);
+    color: var(--ft-white);
+    box-shadow: 0 12px 26px rgba(23, 19, 39, 0.16);
+}
+
+
+/* =========================================================
+   EMPTY STATES
+========================================================= */
+
+.resultados-empty-state {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px dashed rgba(59, 34, 114, 0.18);
+    border-radius: var(--ft-radius-md);
+    background: #FAFAFC;
+    color: var(--ft-gray-500);
+    text-align: center;
+    font-size: 0.88rem;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.resultados-footer {
+    padding: 1.5rem;
+}
+
+.resultados-footer__text {
+    justify-content: center;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media screen and (max-width: 900px) {
+    .resultados-hero {
         grid-template-columns: 1fr;
     }
-    
-    .contenedor-grafico {
-        padding: 16px;
+
+    .resultados-hero__title {
+        font-size: 2.7rem;
     }
-    
-    .canvas-grafico {
-        max-width: 100%;
+
+    .resultados-section-header {
+        flex-direction: column;
+    }
+
+    .resultados-status,
+    .resultados-button {
+        width: 100%;
+    }
+
+    .resultados-charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+     .resultados-analysis {
+        grid-template-columns: 1fr;
+    }
+
+    .resultado-paso {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .resultados-main {
+        padding-inline: 0.8rem;
+        padding-top: calc(4.5rem + 1.4rem);
+    }
+
+    .resultados-hero {
+        padding: 1.4rem;
+        border-radius: var(--ft-radius-lg);
+    }
+
+    .resultados-card {
+        padding: 1.1rem;
     }
 }

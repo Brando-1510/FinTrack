@@ -1,266 +1,609 @@
-/**
- * =============================================================================
- * cuentas.css - Estilos específicos de la página Catálogo de Cuentas
- * =============================================================================
- * 
- * Este archivo complementa a principal.css con estilos exclusivos para
- * la página cuentas.html: ajustes del formulario, estilos de validación
- * en tiempo real, y personalización de la tabla de cuentas.
- */
+/* =========================================================
+   CUENTAS.CSS
+   Estilos específicos para cuentas.html.
+   Reutiliza variables y componentes de principal.css + index.css.
+========================================================= */
 
-/* =============================================================================
-   FORMULARIO DE CUENTAS
-   ============================================================================= */
 
-/* Texto de ayuda debajo de los campos */
-.texto-ayuda {
+.cuentas-main {
+    margin-top: 0;
+    padding: calc(4.5rem + 2.4rem) 1rem 3rem;
+}
+
+.cuentas-container {
+    width: min(100%, 1180px);
+    max-width: 1180px;
+    margin-inline: auto;
+}
+
+
+/* =========================================================
+   HERO DE CUENTAS
+========================================================= */
+
+.cuentas-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 18rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    padding: clamp(1.5rem, 3vw, 3rem);
+    border-radius: var(--ft-radius-xl);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background:
+        radial-gradient(circle at 88% 20%, rgba(5, 150, 105, 0.42), transparent 14rem),
+        radial-gradient(circle at 0% 100%, rgba(109, 93, 242, 0.50), transparent 18rem),
+        linear-gradient(135deg, var(--ft-purple-800), var(--ft-purple-900));
+    color: var(--ft-white);
+    text-align: left;
+    box-shadow: var(--ft-shadow-lg);
+}
+
+.cuentas-hero::before {
+    content: "";
+    position: absolute;
+    right: -5rem;
+    bottom: -6rem;
+    width: 17rem;
+    height: 17rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.cuentas-hero__content {
+    position: relative;
+    z-index: 1;
+}
+
+.cuentas-hero__eyebrow {
+    width: fit-content;
+    display: inline-flex;
+    margin-bottom: 1rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    border: 3px solid var(--ft-green-600);
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+}
+
+.cuentas-hero__title {
+    max-width: 760px;
+    margin-bottom: 0.75rem;
+    color: var(--ft-white);
+    font-size: clamp(2.4rem, 6vw, 4.7rem);
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: -0.08em;
+}
+
+.cuentas-hero__subtitle {
+    max-width: 760px;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: clamp(1rem, 1.6vw, 1.22rem);
+    line-height: 1.55;
+}
+
+.cuentas-hero__panel {
+    position: relative;
+    z-index: 1;
+    padding: 1.45rem;
+    border-radius: var(--ft-radius-lg);
+    background: rgba(3, 3, 3, 0.18);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.cuentas-hero__panel-label {
+    color: rgba(255, 255, 255, 0.66);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.cuentas-hero__panel-title {
     display: block;
-    margin-top: 4px;
-    font-size: var(--tamano-pequeno);
-    color: var(--texto-secundario);
-    font-style: italic;
+    margin-block: 0.25rem;
+    color: var(--ft-white);
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
 }
 
-/* Resaltado visual del campo cuando hay error de validación */
-.campo-texto.error,
-.campo-seleccion.error,
-.campo-textarea.error {
-    border-color: var(--color-error);
-    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15);
+.cuentas-hero__panel-text {
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 0.85rem;
+    line-height: 1.55;
 }
 
-/* Resaltado visual del campo cuando es válido */
-.campo-texto.valido,
-.campo-seleccion.valido,
-.campo-textarea.valido {
-    border-color: var(--color-exito);
-    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.15);
+
+/* =========================================================
+   LAYOUT PRINCIPAL
+========================================================= */
+
+.cuentas-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.3rem;
+    align-items: start;
 }
 
-/* Estilo especial para el grupo de radio buttons de naturaleza */
-.grupo-radio .opcion-radio {
-    padding: 8px 12px;
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radio-borde-pequeno);
-    transition: all 0.2s ease;
-    flex: 1;
+
+.cuentas-card {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0;
+    padding: clamp(1.25rem, 2vw, 1.7rem);
+    border: 1px solid rgba(59, 34, 114, 0.08);
+    border-radius: var(--ft-radius-lg);
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: var(--ft-shadow-sm);
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
-.grupo-radio .opcion-radio:hover {
-    background-color: #f8f9fa;
-    border-color: var(--color-principal);
+.cuentas-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(109, 93, 242, 0.22);
+    box-shadow: var(--ft-shadow-md);
 }
 
-/* Radio button seleccionado: resaltamos toda la opción */
-.opcion-radio input[type="radio"]:checked + span {
-    color: var(--color-principal);
-    font-weight: 600;
+.cuentas-card__header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    margin-bottom: 1.25rem;
 }
 
-.opcion-radio input[type="radio"]:checked {
-    accent-color: var(--color-principal);
+.cuentas-card__icon {
+    width: 2.65rem;
+    height: 2.65rem;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    border-radius: 0.95rem;
+    background: var(--ft-green-100);
+    color: var(--ft-green-700);
+    font-size: 1.45rem;
+    font-weight: 800;
 }
 
-/* =============================================================================
-   TABLA DE CUENTAS - ESTILOS ESPECÍFICOS
-   ============================================================================= */
-
-/* Ancho de las columnas de la tabla de cuentas */
-#tabla-cuentas th:nth-child(1),
-#tabla-cuentas td:nth-child(1) {
-    width: 60px;
-    text-align: center;
+.cuentas-card__heading {
+    min-width: 0;
 }
 
-#tabla-cuentas th:nth-child(3),
-#tabla-cuentas td:nth-child(3) {
-    width: 120px;
+.cuentas-card__eyebrow {
+    display: inline-flex;
+    margin-bottom: 0.4rem;
+    padding: 0.28rem 0.7rem;
+    border-radius: 999px;
+    background: var(--ft-purple-100);
+    color: var(--ft-purple-800);
+    font-size: 0.72rem;
+    font-weight: 800;
 }
 
-#tabla-cuentas th:nth-child(4),
-#tabla-cuentas td:nth-child(4) {
-    width: 100px;
+.cuentas-card__title {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: var(--ft-purple-800);
+    font-size: clamp(1.18rem, 2vw, 1.45rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.045em;
 }
 
-#tabla-cuentas th:nth-child(6),
-#tabla-cuentas td:nth-child(6) {
-    width: 160px;
-    text-align: center;
+.cuentas-card__title::before {
+    display: none;
 }
 
-/* Estilo visual para la naturaleza deudora */
-.naturaleza-deudora {
-    color: var(--color-debe);
-    font-weight: 600;
-    background-color: rgba(192, 57, 43, 0.08);
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: var(--tamano-pequeno);
-    display: inline-block;
+.cuentas-card__description {
+    margin-top: 0.35rem;
+    color: var(--ft-gray-500);
+    font-size: 0.84rem;
+    line-height: 1.5;
 }
 
-/* Estilo visual para la naturaleza acreedora */
-.naturaleza-acreedora {
-    color: var(--color-haber);
-    font-weight: 600;
-    background-color: rgba(39, 174, 96, 0.08);
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: var(--tamano-pequeno);
-    display: inline-block;
+
+/* =========================================================
+   FORMULARIO
+========================================================= */
+
+.cuentas-form {
+    display: grid;
+    gap: 1rem;
 }
 
-/* Colores por tipo de cuenta en la tabla */
-#tabla-cuentas td:nth-child(3) {
-    font-weight: 500;
+.cuentas-form__group {
+    margin: 0;
 }
 
-/* Activo: azul */
-#tabla-cuentas td:nth-child(3):contains("Activo") {
-    color: var(--color-principal);
+.cuentas-form__label {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: var(--ft-gray-700);
+    font-size: 0.78rem;
+    font-weight: 800;
 }
 
-/* Pasivo: naranja */
-#tabla-cuentas td:nth-child(3):contains("Pasivo") {
-    color: var(--color-acento);
+.cuentas-form__control {
+    width: 100%;
+    min-height: 2.85rem;
+    padding: 0.65rem 0.02rem;
+    border: 1px solid var(--ft-gray-200);
+    border-radius: var(--ft-radius-sm);
+    background: #FFFFFF;
+    color: var(--ft-gray-950);
+    font-family: var(--ft-font);
+    font-size: 0.88rem;
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
-/* Patrimonio: verde oscuro */
-#tabla-cuentas td:nth-child(3):contains("Patrimonio") {
-    color: #1e8449;
+.cuentas-form__control::placeholder {
+    color: #9CA3AF;
 }
 
-/* Ingreso: verde */
-#tabla-cuentas td:nth-child(3):contains("Ingreso") {
-    color: var(--color-haber);
+.cuentas-form__control:focus {
+    outline: none;
+    border-color: var(--ft-purple-600);
+    box-shadow: 0 0 0 4px rgba(109, 93, 242, 0.14);
 }
 
-/* Costo: rojo suave */
-#tabla-cuentas td:nth-child(3):contains("Costo") {
-    color: #c0392b;
+.cuentas-form__textarea {
+    min-height: 7rem;
+    resize: vertical;
+    line-height: 1.6;
 }
 
-/* Gasto: rojo */
-#tabla-cuentas td:nth-child(3):contains("Gasto") {
-    color: #e74c3c;
+.cuentas-form__help {
+    display: block;
+    margin-top: 0.45rem;
+    color: var(--ft-gray-500);
+    font-size: 0.74rem;
+    line-height: 1.45;
 }
 
-/* Contra-ingreso: rojo oscuro */
-#tabla-cuentas td:nth-child(3):contains("Contra-ingreso") {
-    color: #922b21;
+.cuentas-form__fieldset {
+    padding: 0;
+    border: 0;
 }
 
-/* Contra-costo: verde oscuro */
-#tabla-cuentas td:nth-child(3):contains("Contra-costo") {
-    color: #1e8449;
+.cuentas-form__radio-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin: 0;
 }
 
-/* =============================================================================
-   BOTONES DE ACCIÓN EN LA TABLA
-   ============================================================================= */
-
-/* Botón editar: azul claro */
-.boton-editar {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: var(--radio-borde-pequeno);
+.cuentas-radio-card {
+    position: relative;
+    min-height: 4.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.85rem;
+    border: 1px solid rgba(59, 34, 114, 0.10);
+    border-radius: var(--ft-radius-sm);
+    background: #FAFAFC;
     cursor: pointer;
-    font-size: var(--tamano-pequeno);
-    font-weight: 500;
-    transition: background-color 0.2s ease;
+    transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
 }
 
-.boton-editar:hover {
-    background-color: #2980b9;
+.cuentas-radio-card:hover {
+    transform: translateY(-1px);
+    border-color: rgba(109, 93, 242, 0.28);
 }
 
-/* Botón eliminar: rojo */
-.boton-eliminar {
-    background-color: var(--color-error);
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: var(--radio-borde-pequeno);
+.cuentas-radio-card input {
+    accent-color: var(--ft-green-600);
+}
+
+.cuentas-radio-card__content {
+    display: grid;
+    gap: 0.1rem;
+}
+
+.cuentas-radio-card__content strong {
+    color: var(--ft-purple-800);
+    font-size: 0.82rem;
+}
+
+.cuentas-radio-card__content small {
+    color: var(--ft-gray-500);
+    font-size: 0.72rem;
+}
+
+.cuentas-form__message {
+    margin-top: 0;
+}
+
+.cuentas-form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0;
+}
+
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.cuentas-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.65rem;
+    padding: 0.7rem 1rem;
+    border: 0;
+    border-radius: 999px;
+    font-family: var(--ft-font);
+    font-size: 0.84rem;
+    font-weight: 800;
+    text-decoration: none;
     cursor: pointer;
-    font-size: var(--tamano-pequeno);
-    font-weight: 500;
-    transition: background-color 0.2s ease;
+    transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 
-.boton-eliminar:hover {
-    background-color: #c0392b;
+.cuentas-button:hover {
+    transform: translateY(-2px);
 }
 
-/* =============================================================================
-   ESTADOS DEL FORMULARIO
-   ============================================================================= */
-
-/* Animación suave al cambiar de modo creación a edición */
-#titulo-formulario {
-    transition: color 0.3s ease;
+.cuentas-button--primary {
+    background: var(--ft-green-600);
+    color: var(--ft-white);
+    box-shadow: 0 12px 26px rgba(59, 34, 114, 0.20);
 }
 
-/* Cuando estamos en modo edición, cambiamos el color del título */
-.modo-edicion #titulo-formulario {
-    color: var(--color-acento);
+.cuentas-button--primary:hover {
+    background: var(--ft-purple-900);
 }
 
-/* Resaltado visual de la fila que se está editando */
-.fila-editando {
-    background-color: rgba(230, 126, 34, 0.1) !important;
-    border-left: 3px solid var(--color-acento);
+.cuentas-button--danger {
+    background: var(--ft-red-600);
+    color: var(--ft-white);
+    box-shadow: 0 12px 26px rgba(220, 38, 38, 0.18);
 }
 
-/* =============================================================================
-   RESPONSIVE - PANTALLAS PEQUEÑAS
-   ============================================================================= */
+.cuentas-button--neutral {
+    background: var(--ft-gray-950);
+    color: var(--ft-white);
+    box-shadow: 0 12px 26px rgba(23, 19, 39, 0.16);
+}
 
-@media screen and (max-width: 768px) {
-    
-    /* El formulario ocupa todo el ancho disponible */
-    .grupo-formulario {
-        margin-bottom: 20px;
+
+/* =========================================================
+   TABLA
+========================================================= */
+
+.cuentas-table-card {
+    min-width: 0;
+}
+
+.cuentas-table-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.cuentas-table-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.65rem;
+    margin: 0;
+}
+
+.cuentas-table-wrapper {
+    margin: 0;
+    border: 1px solid rgba(59, 34, 114, 0.08);
+    border-radius: var(--ft-radius-md);
+    background: #FFFFFF;
+    overflow-x: auto;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.80);
+}
+
+.cuentas-table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: transparent;
+    font-size: 0.84rem;
+}
+
+.cuentas-table thead {
+    background: linear-gradient(135deg, var(--ft-purple-800), var(--ft-purple-900));
+    color: var(--ft-white);
+}
+
+.cuentas-table th {
+    padding: 0.9rem 1rem;
+    text-align: left;
+    color: var(--ft-white);
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.cuentas-table th:first-child {
+    border-top-left-radius: var(--ft-radius-md);
+}
+
+.cuentas-table th:last-child {
+    border-top-right-radius: var(--ft-radius-md);
+}
+
+.cuentas-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--ft-gray-200);
+    color: var(--ft-gray-700);
+    vertical-align: middle;
+}
+
+.cuentas-table tbody tr {
+    background: #FFFFFF;
+    transition: background 160ms ease;
+}
+
+.cuentas-table tbody tr:nth-child(even) {
+    background: #FAFAFC;
+}
+
+.cuentas-table tbody tr:hover {
+    background: #F6F3FF;
+}
+
+.cuentas-empty-state {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px dashed rgba(59, 34, 114, 0.18);
+    border-radius: var(--ft-radius-md);
+    background: #FAFAFC;
+    color: var(--ft-gray-500);
+    text-align: center;
+    font-size: 0.88rem;
+}
+
+.cuentas-table td:nth-child(1) {
+    color: var(--ft-purple-800);
+    font-weight: 900;
+    background: rgba(109, 93, 242, 0.07);
+}
+
+.cuentas-table td:nth-child(2) {
+    color: var(--ft-green-700);
+    font-weight: 900;
+    background: rgba(5, 150, 105, 0.065);
+}
+
+.cuentas-table td:nth-child(3) {
+    color: var(--ft-purple-800);
+    font-weight: 900;
+
+}
+
+.cuentas-table td:nth-child(4) {
+    color: var(--ft-gray-500);
+    font-weight: 800;
+}
+
+.cuentas-table tbody tr:hover td:nth-child(3) {
+    background: rgba(109, 93, 242, 0.12);
+}
+
+.cuentas-table tbody tr:hover td:nth-child(5) {
+    background: rgba(109, 93, 242, 0.12);
+}
+
+.cuentas-table td:nth-child(6) button {
+  
+    min-height: 2rem;
+    padding: 0.45rem 0.75rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--ft-red-100);
+    color: var(--ft-green-600);
+    font-family: var(--ft-font);
+    font-size: 0.75rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+
+
+/* =========================================================
+   MENSAJES
+========================================================= */
+
+.mensaje-validacion {
+    padding: 0.8rem 1rem;
+    border-radius: var(--ft-radius-sm);
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.mensaje-validacion.exito {
+    border: 1px solid rgba(5, 150, 105, 0.28);
+    background: var(--ft-green-100);
+    color: var(--ft-green-700);
+}
+
+.mensaje-validacion.error {
+    border: 1px solid rgba(220, 38, 38, 0.25);
+    background: var(--ft-red-100);
+    color: var(--ft-red-600);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.cuentas-footer {
+    padding: 1.5rem;
+}
+
+.cuentas-footer__text {
+    justify-content: center;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media screen and (max-width: 1050px) {
+    .cuentas-table-card__header {
+        align-items: center;
     }
-    
-    /* Los radio buttons se apilan verticalmente */
-    .grupo-radio {
+}
+
+@media screen and (max-width: 900px) {
+    .cuentas-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .cuentas-hero__title {
+        font-size: 2.7rem;
+    }
+
+    .cuentas-form__radio-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .cuentas-main {
+        padding-inline: 0.8rem;
+    }
+
+    .cuentas-hero {
+        padding: 1.4rem;
+        border-radius: var(--ft-radius-lg);
+    }
+
+    .cuentas-card {
+        padding: 1.1rem;
+    }
+
+    .cuentas-card__header,
+    .cuentas-table-card__header {
         flex-direction: column;
-        gap: 8px;
     }
-    
-    .grupo-radio .opcion-radio {
+
+    .cuentas-table-card__actions,
+    .cuentas-form__actions {
         width: 100%;
-    }
-    
-    /* La tabla de cuentas permite scroll horizontal */
-    #tabla-cuentas {
-        font-size: var(--tamano-pequeno);
-    }
-    
-    #tabla-cuentas th,
-    #tabla-cuentas td {
-        padding: 8px;
-    }
-    
-    /* Los botones de acción en la tabla son más compactos */
-    .celda-acciones {
         flex-direction: column;
-        gap: 4px;
     }
-    
-    .boton-editar,
-    .boton-eliminar {
+
+    .cuentas-button {
         width: 100%;
-        padding: 4px 8px;
-        font-size: 12px;
-    }
-    
-    /* Ajustamos los badges de naturaleza */
-    .naturaleza-deudora,
-    .naturaleza-acreedora {
-        font-size: 11px;
-        padding: 1px 6px;
     }
 }

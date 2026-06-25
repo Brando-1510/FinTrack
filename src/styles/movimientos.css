@@ -1,321 +1,854 @@
-/**
- * =============================================================================
- * movimientos.css - Estilos específicos de la página Registro de Movimientos
- * =============================================================================
- * 
- * Este archivo complementa a principal.css con estilos exclusivos para
- * la página movimientos.html: líneas dinámicas del asiento, indicador
- * de totales en tiempo real, y personalización de la tabla de asientos.
- */
+/* =========================================================
+   MOVIMIENTOS.CSS
+   Estilos específicos para movimientos.html.
+   Reutiliza principal.css + index.css.
+========================================================= */
 
-/* =============================================================================
-   LÍNEAS DEL ASIENTO (DINÁMICAS)
-   ============================================================================= */
+.movimientos-main {
+    margin-top: 0;
+    padding: calc(4.5rem + 2.4rem) 1rem 3rem;
+}
 
-/* Contenedor principal de cada línea del asiento */
-.linea-asiento {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr auto;
-    gap: 12px;
-    align-items: end;
-    padding: 16px;
-    margin-bottom: 12px;
-    background-color: #f8f9fa;
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radio-borde-medio);
-    transition: all 0.2s ease;
+.movimientos-container {
+    width: min(100%, 1180px);
+    max-width: 1180px;
+    margin-inline: auto;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.movimientos-hero {
     position: relative;
-}
-
-/* Efecto hover en la línea */
-.linea-asiento:hover {
-    border-color: var(--color-principal);
-    box-shadow: 0 2px 6px rgba(26, 82, 118, 0.1);
-}
-
-/* Número de orden de la línea (se muestra con pseudo-elemento) */
-.linea-asiento::before {
-    content: attr(data-indice);
-    position: absolute;
-    top: -10px;
-    left: 12px;
-    background-color: var(--color-principal);
-    color: white;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 10px;
-}
-
-/* Grupo de cada campo dentro de la línea */
-.grupo-linea {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-/* Etiqueta compacta para los campos de línea */
-.grupo-linea .etiqueta-formulario {
-    font-size: 12px;
-    margin-bottom: 0;
-    color: var(--texto-secundario);
-}
-
-/* Select de cuenta: ancho completo */
-.campo-cuenta {
-    width: 100%;
-    min-width: 200px;
-}
-
-/* Radio buttons compactos para Debe/Haber */
-.grupo-radio-compacto {
-    flex-direction: row;
-    gap: 8px;
-}
-
-.grupo-radio-compacto .opcion-radio {
-    flex: 1;
-    padding: 6px 10px;
-    text-align: center;
-    font-size: var(--tamano-pequeno);
-}
-
-/* Resaltado visual cuando se selecciona Debe */
-.opcion-radio:has(input[value="debe"]:checked) {
-    background-color: rgba(192, 57, 43, 0.1);
-    border-color: var(--color-debe);
-}
-
-/* Resaltado visual cuando se selecciona Haber */
-.opcion-radio:has(input[value="haber"]:checked) {
-    background-color: rgba(39, 174, 96, 0.1);
-    border-color: var(--color-haber);
-}
-
-/* Campo de monto: alineación derecha para números */
-.campo-monto {
-    text-align: right;
-    font-family: 'Courier New', monospace;
-    font-weight: 500;
-}
-
-/* Botón eliminar línea: alineado al final */
-.grupo-boton-eliminar {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding-bottom: 2px;
-}
-
-/* =============================================================================
-   INDICADOR DE TOTALES EN TIEMPO REAL
-   ============================================================================= */
-
-/* Contenedor del indicador */
-.indicador-totales {
-    background-color: #f8f9fa;
-    border: 2px solid var(--color-borde);
-    border-radius: var(--radio-borde-medio);
-    padding: 16px 20px;
-    margin-top: 16px;
+    overflow: hidden;
+    min-height: 18rem;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+    align-items: end;
+    gap: 2rem;
+    margin-bottom: 1.6rem;
+    padding: clamp(2rem, 5vw, 4rem);
+    border-radius: var(--ft-radius-xl);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background:
+        radial-gradient(circle at 88% 20%, rgba(5, 150, 105, 0.42), transparent 14rem),
+        radial-gradient(circle at 0% 100%, rgba(109, 93, 242, 0.50), transparent 18rem),
+        linear-gradient(135deg, var(--ft-purple-800), var(--ft-purple-900));
+    color: var(--ft-white);
+    text-align: left;
+    box-shadow: var(--ft-shadow-lg);
 }
 
-/* Cada fila del indicador */
-.fila-indicador {
+.movimientos-hero::before {
+    content: "";
+    position: absolute;
+    right: -5rem;
+    bottom: -6rem;
+    width: 17rem;
+    height: 17rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.movimientos-hero__content {
+    position: relative;
+    z-index: 1;
+}
+
+.movimientos-hero__eyebrow {
+    width: fit-content;
+    display: inline-flex;
+    margin-bottom: 1rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    border: 3px solid var(--ft-green-600);
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+}
+
+.movimientos-hero__title {
+    max-width: 760px;
+    margin-bottom: 0.75rem;
+    color: var(--ft-white);
+    font-size: clamp(2.4rem, 6vw, 4.7rem);
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: -0.08em;
+}
+
+.movimientos-hero__subtitle {
+    max-width: 760px;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: clamp(1rem, 1.6vw, 1.22rem);
+    line-height: 1.55;
+}
+
+.movimientos-hero__panel {
+    position: relative;
+    z-index: 1;
+    padding: 1.45rem;
+    border-radius: var(--ft-radius-lg);
+    background: rgba(3, 3, 3, 0.18);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.movimientos-hero__panel-label {
+    color: rgba(255, 255, 255, 0.66);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.movimientos-hero__panel-title {
+    display: block;
+    margin-block: 0.25rem;
+    color: var(--ft-white);
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.movimientos-hero__panel-text {
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 0.85rem;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.movimientos-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.35rem;
+    align-items: start;
+}
+
+.movimientos-card {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0;
+    padding: clamp(1.25rem, 2vw, 1.7rem);
+    border: 1px solid rgba(59, 34, 114, 0.08);
+    border-radius: var(--ft-radius-lg);
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: var(--ft-shadow-sm);
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.movimientos-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(109, 93, 242, 0.22);
+    box-shadow: var(--ft-shadow-md);
+}
+
+.movimientos-card__header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    margin-bottom: 1.25rem;
+}
+
+.movimientos-card__icon {
+    width: 2.65rem;
+    height: 2.65rem;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    border-radius: 0.95rem;
+    background: var(--ft-green-100);
+    color: var(--ft-green-700);
+    font-size: 1.45rem;
+    font-weight: 800;
+}
+
+.movimientos-card__heading {
+    min-width: 0;
+}
+
+.movimientos-card__eyebrow {
+    display: inline-flex;
+    margin-bottom: 0.4rem;
+    padding: 0.28rem 0.7rem;
+    border-radius: 999px;
+    background: var(--ft-purple-100);
+    color: var(--ft-purple-800);
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.movimientos-card__title {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: var(--ft-purple-800);
+    font-size: clamp(1.18rem, 2vw, 1.45rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.045em;
+}
+
+.movimientos-card__title::before {
+    display: none;
+}
+
+.movimientos-card__description {
+    margin-top: 0.35rem;
+    color: var(--ft-gray-500);
+    font-size: 0.84rem;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   FORMULARIO
+========================================================= */
+
+.movimientos-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.movimientos-form__group {
+    margin: 0;
+}
+
+.movimientos-form__label {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: var(--ft-gray-700);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.movimientos-form__control {
+    width: 100%;
+    min-height: 2.85rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--ft-gray-200);
+    border-radius: var(--ft-radius-sm);
+    background: #FFFFFF;
+    color: var(--ft-gray-950);
+    font-family: var(--ft-font);
+    font-size: 0.88rem;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.movimientos-form__control::placeholder {
+    color: #9CA3AF;
+}
+
+.movimientos-form__control:focus {
+    outline: none;
+    border-color: var(--ft-purple-600);
+    box-shadow: 0 0 0 4px rgba(109, 93, 242, 0.14);
+}
+
+.movimientos-form__control--readonly {
+    background: #FAFAFC;
+    color: var(--ft-purple-800);
+    font-weight: 800;
+}
+
+.movimientos-form__textarea {
+    min-height: 7rem;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.movimientos-form__help {
+    display: block;
+    margin-top: 0.45rem;
+    color: var(--ft-gray-500);
+    font-size: 0.74rem;
+    line-height: 1.45;
+}
+
+.movimientos-form__message {
+    margin-top: 0;
+}
+
+.movimientos-form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0;
+}
+
+.movimientos-form,
+.movimientos-form *,
+.movimientos-form *::before,
+.movimientos-form *::after {
+    box-sizing: border-box;
+}
+
+.movimientos-form {
+    width: 100%;
+    overflow: visible;
+}
+
+.movimientos-form__control,
+.movimientos-form input,
+.movimientos-form select,
+.movimientos-form textarea {
+    max-width: 100%;
+}
+
+.movimientos-form-card {
+    overflow: visible;
+}
+
+
+/* =========================================================
+   LÍNEAS DINÁMICAS DEL ASIENTO
+========================================================= */
+/* =========================================================
+   LÍNEAS DINÁMICAS DEL ASIENTO
+   Corrige visualización de cuenta, movimiento, monto y botón.
+========================================================= */
+
+.movimientos-lines {
+    display: grid;
+    gap: 1rem;
+}
+
+.movimientos-lines__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: 1rem;
+    padding-bottom: 0.25rem;
 }
 
-/* Etiqueta de cada total */
-.etiqueta-total {
-    font-size: var(--tamano-pequeno);
-    color: var(--texto-secundario);
-    font-weight: 500;
+.movimientos-lines__help {
+    margin-top: 0.25rem;
+    margin-bottom: 0;
 }
 
-/* Valor numérico de cada total */
-.valor-total {
-    font-family: 'Courier New', monospace;
-    font-size: 18px;
-    font-weight: 600;
-}
-
-/* La fila de diferencia ocupa toda la fila en el grid */
-.fila-indicador:last-child {
-    grid-column: 1 / -1;
-    border-top: 2px solid var(--color-borde);
-    padding-top: 12px;
-    margin-top: 4px;
-}
-
-/* La diferencia se muestra más grande */
-#diferencia {
-    font-size: 22px;
-    font-weight: 700;
-}
-
-/* =============================================================================
-   TABLA DE ASIENTOS REGISTRADOS
-   ============================================================================= */
-
-/* Ancho de las columnas de la tabla de asientos */
-#tabla-asientos th:nth-child(1),
-#tabla-asientos td:nth-child(1) {
-    width: 60px;
-    text-align: center;
-    font-weight: 600;
-}
-
-#tabla-asientos th:nth-child(2),
-#tabla-asientos td:nth-child(2) {
-    width: 100px;
+.movimientos-lines__button {
+    min-height: 2.45rem;
+    padding: 0.65rem 1rem;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    font-size: 0.82rem;
     white-space: nowrap;
 }
 
-#tabla-asientos th:nth-child(4),
-#tabla-asientos td:nth-child(4),
-#tabla-asientos th:nth-child(5),
-#tabla-asientos td:nth-child(5) {
-    width: 120px;
-    text-align: right;
+.movimientos-lines__container {
+    display: grid;
+    gap: 0.9rem;
 }
 
-#tabla-asientos th:nth-child(7),
-#tabla-asientos td:nth-child(7) {
-    width: 100px;
-    text-align: center;
+/* Card de cada línea generada por JavaScript */
+#contenedor-lineas > *,
+.linea-asiento,
+.linea-movimiento,
+.linea-contable,
+.fila-linea {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(260px, 1.45fr) minmax(220px, 0.9fr) minmax(180px, 0.75fr) auto;
+    column-gap: 1rem;
+    row-gap: 0.85rem;
+    align-items: end;
+    padding: 1rem;
+    border: 1px solid rgba(59, 34, 114, 0.10);
+    border-radius: var(--ft-radius-md);
+    background:
+        radial-gradient(circle at 100% 0%, rgba(109, 93, 242, 0.08), transparent 8rem),
+        #FAFAFC;
 }
 
-/* Celdas que pertenecen al encabezado del asiento (con rowspan) */
-.celda-asiento {
-    background-color: rgba(26, 82, 118, 0.05);
-    font-weight: 500;
-    vertical-align: top;
+/* Evita márgenes heredados dentro de cada línea */
+#contenedor-lineas .grupo-formulario,
+#contenedor-lineas .campo-linea,
+#contenedor-lineas .form-group {
+    margin: 0;
+    min-width: 0;
 }
 
-/* Número de asiento: más grande y destacado */
-.celda-asiento:first-child {
-    font-size: 16px;
-    color: var(--color-principal);
+/* Labels dentro de las líneas */
+#contenedor-lineas label,
+#contenedor-lineas .etiqueta-formulario {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--ft-gray-700);
+    font-size: 0.76rem;
+    font-weight: 800;
+}
+
+/* Inputs y selects internos */
+#contenedor-lineas select,
+#contenedor-lineas input[type="text"],
+#contenedor-lineas input[type="number"] {
+    width: 100%;
+    max-width: 100%;
+    min-height: 2.55rem;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid var(--ft-gray-200);
+    border-radius: var(--ft-radius-sm);
+    background: #FFFFFF;
+    color: var(--ft-gray-950);
+    font-family: var(--ft-font);
+    font-size: 0.84rem;
+    box-sizing: border-box;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+#contenedor-lineas select:focus,
+#contenedor-lineas input[type="text"]:focus,
+#contenedor-lineas input[type="number"]:focus {
+    outline: none;
+    border-color: var(--ft-purple-600);
+    box-shadow: 0 0 0 4px rgba(109, 93, 242, 0.12);
+}
+
+/* Grupo de radios Debe / Haber */
+#contenedor-lineas .grupo-radio {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+    margin: 0;
+}
+
+/* Cada opción de radio como mini-card */
+#contenedor-lineas .opcion-radio {
+    min-height: 2.55rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid rgba(59, 34, 114, 0.10);
+    border-radius: var(--ft-radius-sm);
+    background: #FFFFFF;
+    color: var(--ft-gray-700);
+    font-size: 0.8rem;
     font-weight: 700;
+    cursor: pointer;
 }
 
-/* Descripción del asiento: texto más pequeño */
-.celda-descripcion {
-    font-size: var(--tamano-pequeno);
-    color: var(--texto-secundario);
-    max-width: 250px;
-    line-height: 1.4;
+#contenedor-lineas .opcion-radio input[type="radio"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--ft-green-600);
+    flex: 0 0 auto;
 }
 
-/* Celdas de acciones del asiento */
-.celda-acciones {
+/* Botón eliminar dentro de cada línea */
+#contenedor-lineas button {
+    width: auto;
+    min-width: 5.4rem;
+    min-height: 2.35rem;
+    align-self: end;
+    padding: 0.55rem 0.85rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--ft-red-600);
+    color: var(--ft-white);
+    font-family: var(--ft-font);
+    font-size: 0.78rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 10px 22px rgba(220, 38, 38, 0.16);
+    transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+#contenedor-lineas button:hover {
+    transform: translateY(-2px);
+    background: #B91C1C;
+    box-shadow: 0 14px 28px rgba(220, 38, 38, 0.22);
+}
+
+
+/* =========================================================
+   TOTALES
+========================================================= */
+
+.movimientos-totals {
+    display: grid;
+    gap: 0.65rem;
+    padding: 1rem;
+    border: 1px solid rgba(59, 34, 114, 0.08);
+    border-radius: var(--ft-radius-md);
+    background:
+        radial-gradient(circle at 100% 0%, rgba(5, 150, 105, 0.10), transparent 10rem),
+        #FAFAFC;
+}
+
+.movimientos-totals__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.movimientos-totals__row--difference {
+    margin-top: 0.35rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--ft-gray-200);
+}
+
+.movimientos-totals__label {
+    color: var(--ft-gray-500);
+    font-size: 0.84rem;
+    font-weight: 800;
+}
+
+.movimientos-totals__value {
+    color: var(--ft-gray-950);
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.movimientos-totals__value--debit {
+    color: var(--ft-red-600);
+}
+
+.movimientos-totals__value--credit {
+    color: var(--ft-green-600);
+}
+
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.movimientos-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.65rem;
+    padding: 0.7rem 1rem;
+    border: 0;
+    border-radius: 999px;
+    font-family: var(--ft-font);
+    font-size: 0.84rem;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, opacity 180ms ease;
+}
+
+.movimientos-button:hover {
+    transform: translateY(-2px);
+}
+
+.movimientos-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.movimientos-button--primary {
+    background: var(--ft-green-600);
+    color: var(--ft-white);
+    box-shadow: 0 12px 26px rgba(59, 34, 114, 0.20);
+}
+
+.movimientos-button--primary:hover {
+    background: var(--ft-green-700);
+}
+
+.movimientos-button--secondary {
+    background: var(--ft-green-600);
+    color: var(--ft-white);
+    box-shadow: 0 12px 28px rgba(5, 150, 105, 0.22);
+}
+
+.movimientos-button--secondary:hover {
+    background: var(--ft-green-700);
+}
+
+.movimientos-button--danger {
+    background: var(--ft-red-600);
+    color: var(--ft-white);
+    box-shadow: 0 12px 26px rgba(220, 38, 38, 0.18);
+}
+
+.movimientos-button--neutral {
+    background: var(--ft-gray-950);
+    color: var(--ft-white);
+    box-shadow: 0 12px 26px rgba(23, 19, 39, 0.16);
+}
+
+
+/* =========================================================
+   TABLA
+========================================================= */
+
+.movimientos-table-card {
+    min-width: 0;
+}
+
+.movimientos-table-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.movimientos-table-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.65rem;
+    margin: 0;
+}
+
+.movimientos-table-wrapper {
+    margin: 0;
+    border: 1px solid rgba(59, 34, 114, 0.08);
+    border-radius: var(--ft-radius-md);
+    background: #FFFFFF;
+    overflow-x: auto;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.80);
+}
+
+.movimientos-table {
+    width: 100%;
+    min-width: 820px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: transparent;
+    font-size: 0.84rem;
+}
+
+.movimientos-table thead {
+    background: linear-gradient(135deg, var(--ft-purple-800), var(--ft-purple-900));
+    color: var(--ft-white);
+}
+
+.movimientos-table th {
+    padding: 0.9rem 1rem;
+    text-align: left;
+    color: var(--ft-white);
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.movimientos-table th:first-child {
+    border-top-left-radius: var(--ft-radius-md);
+}
+
+.movimientos-table th:last-child {
+    border-top-right-radius: var(--ft-radius-md);
+}
+
+.movimientos-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--ft-gray-200);
+    color: var(--ft-gray-700);
     vertical-align: middle;
 }
 
-/* =============================================================================
-   ESTADOS DEL BOTÓN REGISTRAR
-   ============================================================================= */
-
-/* Botón deshabilitado: gris y sin interacción */
-#boton-registrar:disabled {
-    background-color: #bdc3c7;
-    color: #7f8c8d;
-    cursor: not-allowed;
-    opacity: 0.7;
+.movimientos-table tbody tr {
+    background: #FFFFFF;
+    transition: background 160ms ease;
 }
 
-/* Botón habilitado: animación sutil de pulso */
-#boton-registrar:not(:disabled) {
-    animation: pulso-boton 2s infinite;
+.movimientos-table tbody tr:nth-child(even) {
+    background: #FAFAFC;
 }
 
-@keyframes pulso-boton {
-    0% {
-        box-shadow: 0 0 0 0 rgba(26, 82, 118, 0.4);
-    }
-    70% {
-        box-shadow: 0 0 0 10px rgba(26, 82, 118, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(26, 82, 118, 0);
-    }
+.movimientos-table tbody tr:hover {
+    background: #F6F3FF;
 }
 
-/* =============================================================================
-   RESPONSIVE - PANTALLAS PEQUEÑAS
-   ============================================================================= */
+.movimientos-empty-state {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px dashed rgba(59, 34, 114, 0.18);
+    border-radius: var(--ft-radius-md);
+    background: #FAFAFC;
+    color: var(--ft-gray-500);
+    text-align: center;
+    font-size: 0.88rem;
+}
 
-@media screen and (max-width: 768px) {
-    
-    /* Las líneas del asiento se apilan en una sola columna */
-    .linea-asiento {
+/* =========================================================
+   MEJORA VISUAL TABLA ASIENTOS REGISTRADOS
+   Solo da color y jerarquía a columnas clave.
+========================================================= */
+
+/* Número de asiento */
+.movimientos-table td:nth-child(1) {
+    color: var(--ft-purple-800);
+    font-weight: 900;
+    background: rgba(109, 93, 242, 0.07);
+}
+
+/* Fecha */
+.movimientos-table td:nth-child(2) {
+    color: var(--ft-gray-500);
+    font-weight: 800;
+}
+
+/* Cuenta */
+.movimientos-table td:nth-child(3) {
+    color: var(--ft-purple-900);
+    font-weight: 850;
+}
+
+/* Debe */
+.movimientos-table td:nth-child(4) {
+    color: var(--ft-red-600);
+    font-weight: 900;
+    background: rgba(220, 38, 38, 0.055);
+}
+
+/* Haber */
+.movimientos-table td:nth-child(5) {
+    color: var(--ft-green-700);
+    font-weight: 900;
+    background: rgba(5, 150, 105, 0.065);
+}
+
+/* Descripción */
+.movimientos-table td:nth-child(6) {
+    color: var(--ft-gray-700);
+    line-height: 1.45;
+}
+
+/* Acciones */
+.movimientos-table td:nth-child(7) {
+    text-align: center;
+}
+
+/* Botones internos de acciones generados por JS */
+.movimientos-table td:nth-child(7) button {
+    min-height: 2rem;
+    padding: 0.45rem 0.75rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--ft-purple-100);
+    color: var(--ft-purple-800);
+    font-family: var(--ft-font);
+    font-size: 0.75rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.movimientos-table td:nth-child(7) button:hover {
+    background: var(--ft-purple-800);
+    color: var(--ft-white);
+    transform: translateY(-1px);
+}
+
+/* Hover sin destruir los colores importantes */
+.movimientos-table tbody tr:hover td:nth-child(1) {
+    background: rgba(109, 93, 242, 0.12);
+}
+
+.movimientos-table tbody tr:hover td:nth-child(4) {
+    background: rgba(220, 38, 38, 0.085);
+}
+
+.movimientos-table tbody tr:hover td:nth-child(5) {
+    background: rgba(5, 150, 105, 0.095);
+}
+
+
+/* =========================================================
+   MENSAJES
+========================================================= */
+
+.mensaje-validacion {
+    padding: 0.8rem 1rem;
+    border-radius: var(--ft-radius-sm);
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.mensaje-validacion.exito {
+    border: 1px solid rgba(5, 150, 105, 0.28);
+    background: var(--ft-green-100);
+    color: var(--ft-green-700);
+}
+
+.mensaje-validacion.error {
+    border: 1px solid rgba(220, 38, 38, 0.25);
+    background: var(--ft-red-100);
+    color: var(--ft-red-600);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.movimientos-footer {
+    padding: 1.5rem;
+}
+
+.movimientos-footer__text {
+    justify-content: center;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media screen and (max-width: 900px) {
+    .movimientos-hero {
         grid-template-columns: 1fr;
-        gap: 12px;
-        padding: 20px 16px 16px;
     }
-    
-    /* El número de orden se reposiciona */
-    .linea-asiento::before {
-        top: 8px;
-        right: 12px;
-        left: auto;
+
+    .movimientos-hero__title {
+        font-size: 2.7rem;
     }
-    
-    /* Los radio buttons se distribuyen en fila completa */
-    .grupo-radio-compacto {
-        justify-content: center;
+
+    .movimientos-lines__header {
+        flex-direction: column;
     }
-    
-    .grupo-radio-compacto .opcion-radio {
-        padding: 8px 16px;
-    }
-    
-    /* El botón eliminar ocupa todo el ancho */
-    .grupo-boton-eliminar {
+
+    .movimientos-lines__button {
         width: 100%;
     }
-    
-    .grupo-boton-eliminar .boton {
-        width: 100%;
-    }
-    
-    /* El indicador de totales se apila */
-    .indicador-totales {
+
+    #contenedor-lineas > *,
+    .linea-asiento,
+    .linea-movimiento,
+    .linea-contable,
+    .fila-linea {
         grid-template-columns: 1fr;
-        gap: 8px;
     }
-    
-    .fila-indicador {
-        justify-content: space-between;
+}
+
+@media screen and (max-width: 640px) {
+    .movimientos-main {
+        padding-inline: 0.8rem;
     }
-    
-    .fila-indicador:last-child {
-        border-top: 1px solid var(--color-borde);
-        padding-top: 8px;
-        margin-top: 0;
+
+    .movimientos-hero {
+        padding: 1.4rem;
+        border-radius: var(--ft-radius-lg);
     }
-    
-    /* La tabla de asientos: fuente más pequeña */
-    #tabla-asientos {
-        font-size: var(--tamano-pequeno);
+
+    .movimientos-card {
+        padding: 1.1rem;
     }
-    
-    #tabla-asientos th,
-    #tabla-asientos td {
-        padding: 8px;
+
+    .movimientos-card__header,
+    .movimientos-table-card__header {
+        flex-direction: column;
     }
-    
-    /* La descripción se trunca en móvil */
-    .celda-descripcion {
-        max-width: 120px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+
+    .movimientos-table-card__actions,
+    .movimientos-form__actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .movimientos-button {
+        width: 100%;
     }
 }
