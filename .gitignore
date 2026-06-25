@@ -24,6 +24,6 @@ coverage/
 *.log
 
 # Ignorar carpetas de editores e IDEs
-.idea/
-.vscode/
+.idea
+.vscode
 *.sublime-workspace
