@@ -3,254 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Movimientos - Sistema Contable Educativo</title>
-   
+    <title>FinTrack | Registro de Movimientos</title>
+
     <link rel="stylesheet" href="../styles/principal.css">
     <link rel="stylesheet" href="../styles/movimientos.css">
     <link rel="stylesheet" href="../styles/impresion.css" media="print">
 </head>
+
 <body>
-    
-    <nav class="navegacion-principal">
-        <div class="contenedor-navegacion">
-            <a href="../../index.html" class="titulo-navegacion">Contabilidad Educativa</a>
-            
-            <button id="boton-menu-hamburguesa" class="boton-menu-hamburguesa" aria-label="Abrir menú de navegación">
+    <nav class="navegacion-principal navegacion-principal--index">
+        <div class="contenedor-navegacion index-nav">
+            <a href="../../index.html" class="titulo-navegacion index-nav__brand" aria-label="Ir a la página principal"></a>
+                Fin-Track
+            </a>
+
+
+            <button
+                id="boton-menu-hamburguesa"
+                class="boton-menu-hamburguesa index-nav__toggle"
+                type="button"
+                aria-label="Abrir menú de navegación"
+            >
                 <span class="linea"></span>
                 <span class="linea"></span>
                 <span class="linea"></span>
             </button>
-            
-            <ul id="lista-navegacion" class="lista-navegacion">
-                <li class="elemento-navegacion">
-                    <a href="../../index.html" class="enlace-navegacion">Inicio</a>
+
+            <ul id="lista-navegacion" class="lista-navegacion index-nav__list">
+                <li class="elemento-navegacion index-nav__item">
+                    <a href="../../index.html" class="enlace-navegacion index-nav__link">Inicio</a>
                 </li>
-                <li class="elemento-navegacion">
-                    <a href="cuentas.html" class="enlace-navegacion">Catálogo de Cuentas</a>
+
+                <li class="elemento-navegacion index-nav__item">
+                    <a href="cuentas.html" class="enlace-navegacion index-nav__link">Catálogo de Cuentas</a>
                 </li>
-                <li class="elemento-navegacion">
-                    <a href="movimientos.html" class="enlace-navegacion">Registro de Movimientos</a>
+
+                <li class="elemento-navegacion index-nav__item">
+                    <a href="movimientos.html" class="enlace-navegacion index-nav__link activo">Registro de Movimientos</a>
                 </li>
-                <li class="elemento-navegacion">
-                    <a href="libros.html" class="enlace-navegacion">Libro Diario y Mayor</a>
+
+                <li class="elemento-navegacion index-nav__item">
+                    <a href="libros.html" class="enlace-navegacion index-nav__link">Libro Diario y Mayor</a>
                 </li>
-                <li class="elemento-navegacion">
-                    <a href="resultados.html" class="enlace-navegacion">Resultados</a>
+
+                <li class="elemento-navegacion index-nav__item">
+                    <a href="resultados.html" class="enlace-navegacion index-nav__link">Resultados</a>
                 </li>
             </ul>
         </div>
     </nav>
-    
-    <!-- 
-        =============================================================================
-        CONTENIDO PRINCIPAL
-        =============================================================================
-    -->
-    <main class="contenido-principal">
-        <div class="contenedor">
-            
-            <!-- Encabezado de la página -->
-            <header class="encabezado-pagina">
-                <h1 class="titulo-principal">Registro de Movimientos</h1>
-                <p class="subtitulo-principal">Crea y gestiona los asientos contables del ejercicio</p>
+
+    <main class="contenido-principal movimientos-main">
+        <div class="contenedor movimientos-container">
+
+            <header class="encabezado-pagina movimientos-hero">
+                <div class="movimientos-hero__content">
+                    <span class="movimientos-hero__eyebrow">Módulo de movimientos</span>
+
+                    <h1 class="titulo-principal movimientos-hero__title">
+                        Registro de Movimientos
+                    </h1>
+
+                    <p class="subtitulo-principal movimientos-hero__subtitle">
+                        Crea y gestiona asientos contables respetando la partida doble.
+                    </p>
+                </div>
+
+                <aside class="movimientos-hero__panel" aria-label="Resumen del módulo">
+                    <span class="movimientos-hero__panel-label">Regla principal</span>
+                    <strong class="movimientos-hero__panel-title">Debe = Haber</strong>
+                    <p class="movimientos-hero__panel-text">
+                        Cada asiento debe mantener equilibrio contable antes de registrarse.
+                    </p>
+                </aside>
             </header>
-            
-            <!-- 
-                =============================================================================
-                SECCIÓN: FORMULARIO DE ASIENTO CONTABLE
-                =============================================================================
-                Este formulario permite crear nuevos asientos contables respetando
-                la partida doble: el total del Debe debe ser igual al total del Haber.
-                
-                La partida doble es el principio fundamental de la contabilidad:
-                por cada operación, los cargos (Debe) deben igualar a los abonos (Haber).
-            -->
-            <section class="tarjeta margen-inferior">
-                <h2 class="titulo-tarjeta">Nuevo Asiento Contable</h2>
-                
-                <form id="formulario-asiento" novalidate>
-                    
-                    <!-- Número de asiento (se asigna automáticamente) -->
-                    <div class="grupo-formulario">
-                        <label for="campo-numero-asiento" class="etiqueta-formulario">Número de asiento</label>
-                        <input 
-                            type="text" 
-                            id="campo-numero-asiento" 
-                            class="campo-texto" 
-                            readonly
-                            style="background-color: #f8f9fa; font-weight: 600; color: var(--color-principal);"
-                        >
-                        <small class="texto-ayuda">Se asigna automáticamente de forma secuencial.</small>
-                    </div>
-                    
-                    <!-- Fecha del asiento -->
-                    <div class="grupo-formulario">
-                        <label for="campo-fecha" class="etiqueta-formulario">Fecha *</label>
-                        <input 
-                            type="date" 
-                            id="campo-fecha" 
-                            class="campo-fecha" 
-                            required
-                        >
-                    </div>
-                    
-                    <!-- Descripción del asiento -->
-                    <div class="grupo-formulario">
-                        <label for="campo-descripcion" class="etiqueta-formulario">Descripción del asiento *</label>
-                        <textarea 
-                            id="campo-descripcion" 
-                            class="campo-textarea" 
-                            placeholder="Describe la operación contable que estás registrando..."
-                            required
-                            maxlength="300"
-                        ></textarea>
-                    </div>
-                    
-                    <!-- 
-                        =================================================================
-                        LÍNEAS DEL ASIENTO (DINÁMICAS)
-                        =================================================================
-                        Aquí se agregan dinámicamente las líneas del asiento.
-                        Cada línea indica: cuenta, tipo de movimiento (Debe/Haber) y monto.
-                        Mínimo se requieren 2 líneas para un asiento válido.
-                    -->
-                    <div class="grupo-formulario">
-                        <label class="etiqueta-formulario">Líneas del asiento *</label>
-                        <small class="texto-ayuda" style="margin-bottom: 12px; display: block;">
-                            Mínimo 2 líneas. La suma del Debe debe ser igual a la suma del Haber.
-                        </small>
-                        
-                        <!-- Contenedor donde se agregan las líneas dinámicamente -->
-                        <div id="contenedor-lineas">
-                            <!-- Las líneas se generan con JavaScript -->
-                        </div>
-                        
-                        <!-- Botón para agregar más líneas -->
-                        <button type="button" id="boton-agregar-linea" class="boton boton-secundario boton-pequeno" style="margin-top: 12px;">
-                            + Agregar Línea
-                        </button>
-                    </div>
-                    
-                    <!-- 
-                        =================================================================
-                        INDICADOR EN TIEMPO REAL
-                        =================================================================
-                        Muestra los totales del Debe, Haber y la diferencia.
-                        Se actualiza automáticamente al modificar cualquier monto.
-                    -->
-                    <div class="indicador-totales" id="indicador-totales">
-                        <div class="fila-indicador">
-                            <span class="etiqueta-total">Total Debe:</span>
-                            <span class="valor-total texto-debe" id="total-debe">$0.00</span>
-                        </div>
-                        <div class="fila-indicador">
-                            <span class="etiqueta-total">Total Haber:</span>
-                            <span class="valor-total texto-haber" id="total-haber">$0.00</span>
-                        </div>
-                        <div class="fila-indicador" style="border-top: 1px solid var(--color-borde); padding-top: 8px; margin-top: 8px;">
-                            <span class="etiqueta-total">Diferencia:</span>
-                            <span class="valor-total" id="diferencia">$0.00</span>
+
+            <section class="movimientos-layout" aria-label="Registro y visualización de asientos">
+
+                <section class="tarjeta movimientos-card movimientos-form-card" aria-labelledby="titulo-nuevo-asiento">
+                    <div class="movimientos-card__header">
+                        <span class="movimientos-card__icon" aria-hidden="true">+</span>
+
+                        <div class="movimientos-card__heading">
+                            <h2 class="titulo-tarjeta movimientos-card__title" id="titulo-nuevo-asiento">
+                                Nuevo Asiento Contable
+                            </h2>
+
+                            <p class="movimientos-card__description">
+                                Registra una operación contable con sus líneas de Debe y Haber.
+                            </p>
                         </div>
                     </div>
-                    
-                    <!-- Mensaje de validación de la partida doble -->
-                    <div id="mensaje-partida-doble" class="mensaje-validacion oculto" role="alert"></div>
-                    
-                    <!-- Botones del formulario -->
-                    <div class="grupo-botones" style="margin-top: 20px;">
-                        <button type="submit" id="boton-registrar" class="boton boton-primario" disabled>
-                            Registrar Asiento
-                        </button>
-                        <button type="button" id="boton-limpiar" class="boton boton-peligro">
-                            Limpiar Formulario
-                        </button>
+
+                    <form id="formulario-asiento" class="movimientos-form" novalidate>
+
+                        <div class="grupo-formulario movimientos-form__group">
+                            <label for="campo-numero-asiento" class="etiqueta-formulario movimientos-form__label">
+                                Número de asiento
+                            </label>
+
+                            <input
+                                type="text"
+                                id="campo-numero-asiento"
+                                class="campo-texto movimientos-form__control movimientos-form__control--readonly"
+                                readonly
+                            >
+
+                            <small class="texto-ayuda movimientos-form__help">
+                                Se asigna automáticamente de forma secuencial.
+                            </small>
+                        </div>
+
+                        <div class="grupo-formulario movimientos-form__group">
+                            <label for="campo-fecha" class="etiqueta-formulario movimientos-form__label">
+                                Fecha *
+                            </label>
+
+                            <input
+                                type="date"
+                                id="campo-fecha"
+                                class="campo-fecha movimientos-form__control"
+                                required
+                            >
+                        </div>
+
+                        <div class="grupo-formulario movimientos-form__group">
+                            <label for="campo-descripcion" class="etiqueta-formulario movimientos-form__label">
+                                Descripción del asiento *
+                            </label>
+
+                            <textarea
+                                id="campo-descripcion"
+                                class="campo-textarea movimientos-form__control movimientos-form__textarea"
+                                placeholder="Describe la operación contable que estás registrando..."
+                                required
+                                maxlength="300"
+                            ></textarea>
+                        </div>
+
+                        <div class="grupo-formulario movimientos-form__group movimientos-lines">
+                            <div class="movimientos-lines__header">
+                                <div>
+                                    <label class="etiqueta-formulario movimientos-form__label">
+                                        Líneas del asiento *
+                                    </label>
+
+                                    <small class="texto-ayuda movimientos-form__help movimientos-lines__help">
+                                        Mínimo 2 líneas. La suma del Debe debe ser igual a la suma del Haber.
+                                    </small>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    id="boton-agregar-linea"
+                                    class="boton boton-secundario boton-pequeno movimientos-button movimientos-button--secondary movimientos-lines__button"
+                                >
+                                    + Agregar Línea
+                                </button>
+                            </div>
+
+                            <div id="contenedor-lineas" class="movimientos-lines__container">
+                                <!-- Las líneas se generan con JavaScript -->
+                            </div>
+                        </div>
+
+                        <section class="indicador-totales movimientos-totals" id="indicador-totales" aria-label="Totales del asiento">
+                            <div class="fila-indicador movimientos-totals__row">
+                                <span class="etiqueta-total movimientos-totals__label">Total Debe:</span>
+                                <span class="valor-total texto-debe movimientos-totals__value movimientos-totals__value--debit" id="total-debe">
+                                    $0.00
+                                </span>
+                            </div>
+
+                            <div class="fila-indicador movimientos-totals__row">
+                                <span class="etiqueta-total movimientos-totals__label">Total Haber:</span>
+                                <span class="valor-total texto-haber movimientos-totals__value movimientos-totals__value--credit" id="total-haber">
+                                    $0.00
+                                </span>
+                            </div>
+
+                            <div class="fila-indicador movimientos-totals__row movimientos-totals__row--difference">
+                                <span class="etiqueta-total movimientos-totals__label">Diferencia:</span>
+                                <span class="valor-total movimientos-totals__value" id="diferencia">
+                                    $0.00
+                                </span>
+                            </div>
+                        </section>
+
+                        <div id="mensaje-partida-doble" class="mensaje-validacion movimientos-form__message oculto" role="alert"></div>
+
+                        <div class="grupo-botones movimientos-form__actions">
+                            <button
+                                type="submit"
+                                id="boton-registrar"
+                                class="boton boton-primario movimientos-button movimientos-button--primary"
+                                disabled
+                            >
+                                Registrar Asiento
+                            </button>
+
+                            <button
+                                type="button"
+                                id="boton-limpiar"
+                                class="boton boton-peligro movimientos-button movimientos-button--danger"
+                            >
+                                Limpiar Formulario
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="tarjeta movimientos-card movimientos-table-card" aria-labelledby="titulo-asientos-registrados">
+                    <div class="movimientos-table-card__header">
+                        <div class="movimientos-card__heading">
+                            <span class="movimientos-card__eyebrow">Historial contable</span>
+
+                            <h2 class="titulo-tarjeta movimientos-card__title" id="titulo-asientos-registrados">
+                                Asientos Registrados
+                            </h2>
+                        </div>
+
+                        <div class="grupo-botones movimientos-table-card__actions">
+                            <button
+                                id="boton-restablecer"
+                                class="boton boton-peligro boton-pequeno movimientos-button movimientos-button--danger"
+                            >
+                                Restablecer Ejercicio
+                            </button>
+
+                            <button
+                                id="boton-imprimir"
+                                class="boton boton-imprimir boton-pequeno movimientos-button movimientos-button--neutral"
+                            >
+                                Imprimir
+                            </button>
+                        </div>
                     </div>
-                    
-                </form>
+
+                    <div class="contenedor-tabla movimientos-table-wrapper">
+                        <table class="tabla-datos movimientos-table" id="tabla-asientos">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Número</th>
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">Cuenta</th>
+                                    <th scope="col">Debe</th>
+                                    <th scope="col">Haber</th>
+                                    <th scope="col">Descripción</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="cuerpo-tabla-asientos">
+                                <!-- Las filas se generan dinámicamente con JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p id="mensaje-sin-asientos" class="mensaje-vacio movimientos-empty-state oculto">
+                        No hay asientos registrados. Crea un nuevo asiento usando el formulario de arriba.
+                    </p>
+                </section>
+
             </section>
-            
-            <!-- 
-                =============================================================================
-                SECCIÓN: TABLA DE ASIENTOS REGISTRADOS
-                =============================================================================
-                Muestra todos los asientos contables registrados, agrupados por número.
-                Permite eliminar asientos completos.
-            -->
-            <section class="tarjeta">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
-                    <h2 class="titulo-tarjeta" style="margin: 0; border: none; padding: 0;">Asientos Registrados</h2>
-                    
-                    <!-- Grupo de botones de acción -->
-                    <div class="grupo-botones" style="margin: 0;">
-                        <button id="boton-restablecer" class="boton boton-peligro boton-pequeno">
-                            Restablecer Ejercicio
-                        </button>
-                        <button id="boton-imprimir" class="boton boton-imprimir boton-pequeno">
-                            Imprimir
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Contenedor con scroll horizontal para la tabla -->
-                <div class="contenedor-tabla">
-                    <table class="tabla-datos" id="tabla-asientos">
-                        <thead>
-                            <tr>
-                                <th>Número</th>
-                                <th>Fecha</th>
-                                <th>Cuenta</th>
-                                <th>Debe</th>
-                                <th>Haber</th>
-                                <th>Descripción</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="cuerpo-tabla-asientos">
-                            <!-- Las filas se generan dinámicamente con JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- Mensaje que aparece cuando no hay asientos -->
-                <p id="mensaje-sin-asientos" class="mensaje-vacio oculto">
-                    No hay asientos registrados. Crea un nuevo asiento usando el formulario de arriba.
-                </p>
-                
-            </section>
-            
         </div>
     </main>
-    
-    <!-- 
-        =============================================================================
-        PIE DE PÁGINA
-        =============================================================================
-    -->
-    <footer class="pie-pagina">
-        <p class="texto-pie">
-            Sistema Contable Educativo - Método Pormenorizado | 
-            Creado para fines didácticos | 
-            <span id="anio-actual">2024</span>
+
+    <footer class="pie-pagina index-footer movimientos-footer">
+        <p class="texto-pie index-footer__text movimientos-footer__text">
+            Sistema Contable FinTrack - Método Pormenorizado |
+            <span id="anio-actual">2026</span>
         </p>
     </footer>
-    
-    <!-- 
-        =============================================================================
-        SCRIPTS
-        =============================================================================
-        Orden de carga importante:
-        1. datos.js - Variables globales con los datos del ejercicio
-        2. principal.js - Funciones compartidas (formato, navegación, impresión)
-        3. movimientos.js - Lógica específica de esta página
-    -->
+
     <script src="../scripts/datos.js"></script>
     <script src="../scripts/principal.js"></script>
     <script src="../scripts/movimientos.js"></script>
-    
-    <!-- Script para el año actual -->
+
     <script>
         document.getElementById('anio-actual').textContent = new Date().getFullYear();
     </script>
-    
 </body>
 </html>

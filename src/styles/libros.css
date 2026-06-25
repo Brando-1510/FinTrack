@@ -1,378 +1,750 @@
-/**
- * =============================================================================
- * libros.css - Estilos específicos de la página Libro Diario y Mayor
- * =============================================================================
- * 
- * Este archivo complementa a principal.css con estilos exclusivos para
- * la página libros.html: pestañas de navegación, esquemas de mayor
- * en formato T, y personalización del Libro Diario y resumen de saldos.
- */
+/* =========================================================
+   LIBROS.CSS
+   Estilos específicos para libros.html.
+   Reutiliza principal.css + index.css.
+========================================================= */
 
-/* =============================================================================
-   PESTAÑAS DE NAVEGACIÓN
-   ============================================================================= */
 
-/* Contenedor de las pestañas */
-.contenedor-pestanas {
-    display: flex;
-    gap: 0;
-    margin-bottom: 24px;
-    background-color: var(--fondo-tarjeta);
-    border-radius: var(--radio-borde-medio);
-    box-shadow: var(--sombra-suave);
-    overflow: hidden;
+/* =========================================================
+   BASE
+   Compensa navbar fixed.
+========================================================= */
+
+.libros-main {
+    margin-top: 0;
+    padding: calc(4.5rem + 2.4rem) 1rem 3rem;
 }
 
-/* Botón de cada pestaña */
-.boton-pestana {
-    flex: 1;
-    padding: 14px 24px;
-    border: none;
-    background-color: transparent;
-    color: var(--texto-secundario);
-    font-family: var(--fuente-principal);
-    font-size: var(--tamano-texto);
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
+.libros-container {
+    width: min(100%, 1180px);
+    max-width: 1180px;
+    margin-inline: auto;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.libros-hero {
     position: relative;
-}
-
-/* Línea indicadora en la parte inferior de la pestaña */
-.boton-pestana::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 3px;
-    background-color: var(--color-principal);
-    transition: all 0.3s ease;
-    transform: translateX(-50%);
-}
-
-/* Hover en pestaña inactiva */
-.boton-pestana:hover {
-    color: var(--color-principal);
-    background-color: rgba(26, 82, 118, 0.05);
-}
-
-/* Pestaña activa */
-.boton-pestana.activa {
-    color: var(--color-principal);
-    font-weight: 600;
-}
-
-/* Línea indicadora visible en pestaña activa */
-.boton-pestana.activa::after {
-    width: 60%;
-}
-
-/* =============================================================================
-   LIBRO DIARIO - TABLA ESPECÍFICA
-   ============================================================================= */
-
-/* Celdas que pertenecen al encabezado del asiento (con rowspan) */
-.celda-asiento-diario {
-    background-color: rgba(26, 82, 118, 0.06);
-    font-weight: 500;
-    vertical-align: top;
-    border-left: 3px solid var(--color-principal);
-}
-
-/* Número de asiento: destacado */
-.celda-asiento-diario:first-child {
-    font-size: 16px;
-    color: var(--color-principal);
-    font-weight: 700;
-    text-align: center;
-}
-
-/* Descripción del asiento */
-.celda-descripcion-diario {
-    font-size: var(--tamano-pequeno);
-    color: var(--texto-secundario);
-    max-width: 300px;
-    line-height: 1.5;
-}
-
-/* Fila de totales en el pie de la tabla */
-.fila-totales {
-    background-color: var(--color-principal) !important;
-    color: white;
-}
-
-.fila-totales td {
-    font-weight: 600;
-    padding: 14px var(--espaciado-medio);
-}
-
-.celda-total-label {
-    text-align: right;
-    font-size: var(--tamano-subtitulo);
-}
-
-/* =============================================================================
-   ESQUEMAS DE MAYOR - FORMATO T
-   ============================================================================= */
-
-/* Contenedor de todos los esquemas de mayor */
-#contenedor-mayores {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 24px;
-    margin-top: 16px;
-}
-
-/* Esquema individual de mayor (formato T) */
-.esquema-mayor {
-    background-color: var(--fondo-tarjeta);
-    border: 2px solid var(--color-borde);
-    border-radius: var(--radio-borde-medio);
     overflow: hidden;
-    box-shadow: var(--sombra-suave);
-    transition: box-shadow 0.2s ease;
+    min-height: 18rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+    align-items: end;
+    gap: 2rem;
+    margin-bottom: 1.6rem;
+    padding: clamp(2rem, 5vw, 4rem);
+    border-radius: var(--ft-radius-xl);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background:
+        radial-gradient(circle at 88% 20%, rgba(5, 150, 105, 0.42), transparent 14rem),
+        radial-gradient(circle at 0% 100%, rgba(109, 93, 242, 0.50), transparent 18rem),
+        linear-gradient(135deg, var(--ft-purple-800), var(--ft-purple-900));
+    color: var(--ft-white);
+    text-align: left;
+    box-shadow: var(--ft-shadow-lg);
+}
+
+.libros-hero::before {
+    content: "";
+    position: absolute;
+    right: -5rem;
+    bottom: -6rem;
+    width: 17rem;
+    height: 17rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.libros-hero__content {
+    position: relative;
+    z-index: 1;
+}
+
+.libros-hero__eyebrow {
+    width: fit-content;
+    display: inline-flex;
+    margin-bottom: 1rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    border: 3px solid var(--ft-green-600);
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+}
+
+.libros-hero__title {
+    max-width: 780px;
+    margin-bottom: 0.75rem;
+    color: var(--ft-white);
+    font-size: clamp(2.4rem, 6vw, 4.7rem);
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: -0.08em;
+}
+
+.libros-hero__subtitle {
+    max-width: 760px;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: clamp(1rem, 1.6vw, 1.22rem);
+    line-height: 1.55;
+}
+
+.libros-hero__panel {
+    position: relative;
+    z-index: 1;
+    padding: 1.45rem;
+    border-radius: var(--ft-radius-lg);
+    background: rgba(3, 3, 3, 0.18);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.libros-hero__panel-label {
+    color: rgba(255, 255, 255, 0.66);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.libros-hero__panel-title {
+    display: block;
+    margin-block: 0.25rem;
+    color: var(--ft-white);
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.libros-hero__panel-text {
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 0.85rem;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   PESTAÑAS
+========================================================= */
+
+.libros-tabs-card {
+    margin-bottom: 1.35rem;
+    padding: 0.55rem;
+    border: 1px solid rgba(59, 34, 114, 0.08);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: var(--ft-shadow-sm);
+}
+
+.libros-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+}
+
+.libros-tabs__button {
+    min-height: 2.75rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ft-gray-500);
+    font-family: var(--ft-font);
+    font-size: 0.86rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+.libros-tabs__button:hover {
+    color: var(--ft-purple-800);
+    background: var(--ft-purple-100);
+}
+
+.libros-tabs__button.activa {
+    color: var(--ft-white);
+    background: linear-gradient(135deg, var(--ft-purple-800), var(--ft-purple-900));
+    box-shadow: 0 12px 26px rgba(59, 34, 114, 0.20);
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.libros-tab-section {
+    display: block;
+}
+
+.libros-card {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0;
+    padding: clamp(1.25rem, 2vw, 1.7rem);
+    border: 1px solid rgba(59, 34, 114, 0.08);
+    border-radius: var(--ft-radius-lg);
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: var(--ft-shadow-sm);
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.libros-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(109, 93, 242, 0.22);
+    box-shadow: var(--ft-shadow-md);
+}
+
+.libros-summary-card {
+    margin-top: 1.35rem;
+}
+
+
+/* =========================================================
+   HEADERS DE SECCIÓN
+========================================================= */
+
+.libros-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.libros-section-header__content {
+    min-width: 0;
+}
+
+.libros-section-header__eyebrow {
+    display: inline-flex;
+    margin-bottom: 0.4rem;
+    padding: 0.28rem 0.7rem;
+    border-radius: 999px;
+    background: var(--ft-purple-100);
+    color: var(--ft-purple-800);
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.libros-section-header__title {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: var(--ft-purple-800);
+    font-size: clamp(1.18rem, 2vw, 1.45rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.045em;
+}
+
+.libros-section-header__title::before {
+    display: none;
+}
+
+.libros-section-header__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.libros-section-text {
+    max-width: 920px;
+    margin-bottom: 1rem;
+    color: var(--ft-gray-500);
+    font-size: 0.86rem;
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   FILTRO MAYOR
+========================================================= */
+
+.libros-filter__label {
+    color: var(--ft-gray-700);
+    font-size: 0.76rem;
+    font-weight: 800;
+}
+
+.libros-filter__select {
+    width: auto;
+    min-width: 220px;
+    min-height: 2.55rem;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid var(--ft-gray-200);
+    border-radius: 999px;
+    background: #FFFFFF;
+    color: var(--ft-gray-950);
+    font-family: var(--ft-font);
+    font-size: 0.84rem;
+}
+
+.libros-filter__select:focus {
+    outline: none;
+    border-color: var(--ft-purple-600);
+    box-shadow: 0 0 0 4px rgba(109, 93, 242, 0.12);
+}
+
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.libros-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0.65rem 1rem;
+    border: 0;
+    border-radius: 999px;
+    font-family: var(--ft-font);
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.libros-button:hover {
+    transform: translateY(-2px);
+}
+
+.libros-button--neutral {
+    background: var(--ft-gray-950);
+    color: var(--ft-white);
+    box-shadow: 0 12px 26px rgba(23, 19, 39, 0.16);
+}
+
+
+/* =========================================================
+   TABLAS
+   No planas: columnas contables y totales tienen color propio.
+========================================================= */
+
+.libros-table-wrapper {
+    margin: 0;
+    border: 1px solid rgba(59, 34, 114, 0.08);
+    border-radius: var(--ft-radius-md);
+    background: #FFFFFF;
+    overflow-x: auto;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.80);
+}
+
+.libros-table {
+    width: 100%;
+    min-width: 820px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: transparent;
+    font-size: 0.84rem;
+}
+
+.libros-table thead {
+    background: linear-gradient(135deg, var(--ft-purple-800), var(--ft-purple-900));
+    color: var(--ft-white);
+}
+
+.libros-table th {
+    padding: 0.9rem 1rem;
+    text-align: left;
+    color: var(--ft-white);
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.libros-table th:first-child {
+    border-top-left-radius: var(--ft-radius-md);
+}
+
+.libros-table th:last-child {
+    border-top-right-radius: var(--ft-radius-md);
+}
+
+.libros-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--ft-gray-200);
+    color: var(--ft-gray-700);
+    vertical-align: middle;
+}
+
+.libros-table tbody tr:nth-child(even) {
+    background: #FAFAFC;
+}
+
+.libros-table tbody tr:hover {
+    background: #F6F3FF;
+}
+
+/* Diario: asiento y fecha con jerarquía */
+.libros-table--diary td:nth-child(1) {
+    color: var(--ft-purple-800);
+    font-weight: 800;
+}
+
+.libros-table--diary td:nth-child(2) {
+    color: var(--ft-gray-500);
+    font-weight: 700;
+}
+
+/* Diario: Debe en rojo suave, Haber en verde */
+.libros-table--diary td:nth-child(4) {
+    color: var(--ft-red-600);
+    font-weight: 800;
+    background: rgba(220, 38, 38, 0.045);
+}
+
+.libros-table--diary td:nth-child(5) {
+    color: var(--ft-green-700);
+    font-weight: 800;
+    background: rgba(5, 150, 105, 0.055);
+}
+
+/* Resumen: naturaleza y saldo diferenciados */
+.libros-table--summary td:nth-child(3) {
+    color: var(--ft-purple-800);
+    font-weight: 800;
+}
+
+.libros-table--summary td:nth-child(4) {
+    color: var(--ft-red-600);
+    font-weight: 800;
+    background: rgba(220, 38, 38, 0.045);
+}
+
+.libros-table--summary td:nth-child(5) {
+    color: var(--ft-green-700);
+    font-weight: 800;
+    background: rgba(5, 150, 105, 0.055);
+}
+
+.libros-table--summary td:nth-child(6) {
+    color: var(--ft-purple-900);
+    font-weight: 900;
+    background: var(--ft-purple-100);
+}
+
+.libros-table--summary td:nth-child(7) {
+    color: var(--ft-green-700);
+    font-weight: 800;
+}
+
+.libros-table tfoot {
+    background: #F6F3FF;
+}
+
+.libros-table tfoot td {
+    color: var(--ft-purple-800);
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   LIBRO MAYOR / ESQUEMAS T
+========================================================= */
+/* =========================================================
+   LIBRO MAYOR / CUENTAS T
+   Estilo minimalista, limpio y coherente con FinTrack.
+========================================================= */
+
+.libros-ledger-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.2rem;
+}
+
+/* Card principal de cada cuenta T */
+.esquema-mayor {
+    overflow: hidden;
+    border: 1px solid rgba(59, 34, 114, 0.12);
+    border-radius: var(--ft-radius-lg);
+    background: #ffffff;
+    box-shadow: 0 14px 34px rgba(46, 16, 101, 0.08);
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
 .esquema-mayor:hover {
-    box-shadow: var(--sombra-media);
+    transform: translateY(-2px);
+    border-color: rgba(109, 93, 242, 0.24);
+    box-shadow: 0 20px 48px rgba(46, 16, 101, 0.13);
 }
 
-/* =============================================================================
-   ENCABEZADO DEL ESQUEMA T
-   ============================================================================= */
-
+/* Header superior */
 .encabezado-mayor {
-    background-color: var(--color-principal);
-    color: white;
-    padding: 14px 16px;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.1rem;
+    border-bottom: 1px solid rgba(59, 34, 114, 0.10);
+    background:
+        radial-gradient(circle at 100% 0%, rgba(109, 93, 242, 0.10), transparent 9rem),
+        #ffffff;
 }
 
 .titulo-cuenta-mayor {
     margin: 0;
-    font-size: 18px;
-    font-weight: 600;
+    color: var(--ft-purple-800);
+    font-size: 1rem;
+    font-weight: 900;
+    letter-spacing: -0.035em;
 }
 
 .naturaleza-cuenta-mayor {
-    display: inline-block;
-    margin-top: 4px;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: 0.9;
-    background-color: rgba(255, 255, 255, 0.2);
-    padding: 2px 10px;
-    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.85rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background: var(--ft-purple-100);
+    color: var(--ft-purple-800);
+    font-size: 0.72rem;
+    font-weight: 900;
+    white-space: nowrap;
 }
 
-/* =============================================================================
-   CUERPO DEL ESQUEMA T (DOS COLUMNAS)
-   ============================================================================= */
-
+/* Cuerpo de la T */
 .cuerpo-mayor {
-    display: flex;
-    min-height: 150px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 11rem;
+    background: #ffffff;
 }
 
-/* Columna individual (Debe o Haber) */
 .columna-mayor {
-    flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 0;
 }
 
-/* Línea divisoria entre Debe y Haber */
 .columna-debe {
-    border-right: 2px solid var(--color-borde);
+    border-right: 1px solid rgba(59, 34, 114, 0.10);
+    background:
+        linear-gradient(90deg, rgba(220, 38, 38, 0.045), transparent 32%),
+        #ffffff;
 }
 
-/* Título de cada columna */
+.columna-haber {
+    background:
+        linear-gradient(90deg, rgba(5, 150, 105, 0.045), transparent 32%),
+        #ffffff;
+}
+
+/* Títulos Debe / Haber menos agresivos */
 .titulo-columna-mayor {
+    margin: 0.85rem 0.85rem 0.35rem;
+    padding: 0.45rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 900;
     text-align: center;
-    padding: 10px;
-    font-weight: 600;
-    font-size: var(--tamano-pequeno);
+    letter-spacing: 0.04em;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 1px solid var(--color-borde);
 }
 
-/* Color específico para el título del Debe */
 .columna-debe .titulo-columna-mayor {
-    color: var(--color-debe);
-    background-color: rgba(192, 57, 43, 0.05);
+    background: rgba(220, 38, 38, 0.10);
+    color: var(--ft-red-600);
 }
 
-/* Color específico para el título del Haber */
 .columna-haber .titulo-columna-mayor {
-    color: var(--color-haber);
-    background-color: rgba(39, 174, 96, 0.05);
+    background: rgba(5, 150, 105, 0.12);
+    color: var(--ft-green-700);
 }
 
-/* Contenedor de movimientos (crece para llenar el espacio) */
-.columna-mayor .movimiento-mayor,
-.columna-mayor .movimiento-vacio {
-    flex: 1;
-}
-
-/* Cada movimiento individual */
-.movimiento-mayor {
-    padding: 8px 14px;
-    text-align: right;
-    font-family: 'Courier New', monospace;
-    font-size: var(--tamano-texto);
-    border-bottom: 1px solid #f0f0f0;
-    color: var(--texto-principal);
-}
-
-/* Estado vacío cuando no hay movimientos */
+/* Movimientos */
+.movimiento-mayor,
 .movimiento-vacio {
-    padding: 8px 14px;
-    text-align: center;
-    color: var(--texto-secundario);
-    font-style: italic;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-/* Total de cada columna */
-.total-columna-mayor {
-    padding: 10px 14px;
+    margin-inline: 0.85rem;
+    padding: 0.62rem 0.75rem;
+    border-bottom: 1px solid rgba(209, 213, 219, 0.7);
+    font-size: 0.86rem;
+    font-weight: 800;
     text-align: right;
-    font-family: 'Courier New', monospace;
-    font-weight: 700;
-    font-size: 16px;
-    background-color: #f8f9fa;
-    border-top: 2px solid var(--color-borde);
-    color: var(--texto-principal);
 }
 
-/* =============================================================================
-   PIE DEL ESQUEMA T (SALDO)
-   ============================================================================= */
+.columna-debe .movimiento-mayor {
+    color: var(--ft-red-600);
+}
 
+.columna-haber .movimiento-mayor {
+    color: var(--ft-green-700);
+}
+
+.movimiento-vacio {
+    color: var(--ft-gray-500);
+    font-weight: 700;
+}
+
+/* Totales de columna */
+.total-columna-mayor {
+    margin-top: auto;
+    margin-inline: 0.85rem;
+    margin-bottom: 0.85rem;
+    padding: 0.72rem 0.8rem;
+    border-radius: var(--ft-radius-sm);
+    font-size: 0.9rem;
+    font-weight: 900;
+    text-align: right;
+}
+
+.columna-debe .total-columna-mayor {
+    background: rgba(220, 38, 38, 0.085);
+    color: var(--ft-red-600);
+}
+
+.columna-haber .total-columna-mayor {
+    background: rgba(5, 150, 105, 0.10);
+    color: var(--ft-green-700);
+}
+
+/* Saldo final */
 .pie-mayor {
-    display: flex;
-    background-color: #f0f4f8;
-    border-top: 2px solid var(--color-principal);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid rgba(59, 34, 114, 0.10);
+    background:
+        radial-gradient(circle at 100% 0%, rgba(109, 93, 242, 0.08), transparent 8rem),
+        #F7F4FF;
 }
 
-/* Cada lado del pie (izquierda y derecha) */
 .saldo-mayor {
-    flex: 1;
-    padding: 12px 14px;
-    text-align: center;
-    font-size: var(--tamano-pequeno);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.95rem 1rem;
 }
 
-/* Línea divisoria en el pie */
 .saldo-mayor:first-child {
-    border-right: 1px solid var(--color-borde);
+    border-right: 1px solid rgba(59, 34, 114, 0.10);
 }
 
-/* Etiqueta del saldo */
 .etiqueta-saldo {
-    color: var(--texto-secundario);
-    font-weight: 500;
+    color: var(--ft-purple-800);
+    font-size: 0.76rem;
+    font-weight: 900;
 }
 
-/* Valor del saldo */
 .valor-saldo {
-    font-family: 'Courier New', monospace;
-    font-weight: 700;
-    font-size: 15px;
-    color: var(--color-principal);
+    color: var(--ft-purple-900);
+    font-size: 0.95rem;
+    font-weight: 900;
+    white-space: nowrap;
 }
 
-/* =============================================================================
-   RESUMEN DE SALDOS - TABLA ESPECÍFICA
-   ============================================================================= */
 
-/* Indicador visual del tipo de saldo */
-.indicador-saldo {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+/* =========================================================
+   EMPTY STATES
+========================================================= */
+
+.libros-empty-state {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px dashed rgba(59, 34, 114, 0.18);
+    border-radius: var(--ft-radius-md);
+    background: #FAFAFC;
+    color: var(--ft-gray-500);
+    text-align: center;
+    font-size: 0.88rem;
 }
 
-/* Saldo deudor: rojo suave */
-.saldo-deudor {
-    background-color: rgba(192, 57, 43, 0.1);
-    color: var(--color-debe);
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.libros-footer {
+    padding: 1.5rem;
 }
 
-/* Saldo acreedor: verde */
-.saldo-acreedor {
-    background-color: rgba(39, 174, 96, 0.1);
-    color: var(--color-haber);
+.libros-footer__text {
+    justify-content: center;
 }
 
-/* =============================================================================
-   RESPONSIVE - PANTALLAS PEQUEÑAS
-   ============================================================================= */
+/* =========================================================
+   FIX PESTAÑAS
+   Evita que se muestren Diario y Mayor al mismo tiempo.
+========================================================= */
 
-@media screen and (max-width: 768px) {
-    
-    /* Pestañas: texto más pequeño */
-    .boton-pestana {
-        padding: 12px 8px;
-        font-size: var(--tamano-pequeno);
-    }
-    
-    /* Libro Diario: tabla compacta */
-    #tabla-diario {
-        font-size: var(--tamano-pequeno);
-    }
-    
-    #tabla-diario th,
-    #tabla-diario td {
-        padding: 8px;
-    }
-    
-    .celda-descripcion-diario {
-        max-width: 150px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    
-    /* Esquemas de mayor: una sola columna */
-    #contenedor-mayores {
+.libros-tab-section.oculto,
+#seccion-diario.oculto,
+#seccion-mayor.oculto {
+    display: none !important;
+}
+
+.libros-tab-section:not(.oculto) {
+    display: block;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media screen and (max-width: 900px) {
+    .libros-hero {
         grid-template-columns: 1fr;
     }
-    
-    /* Esquema T: columnas apiladas verticalmente */
-    .cuerpo-mayor {
+
+    .libros-hero__title {
+        font-size: 2.7rem;
+    }
+
+    .libros-section-header {
         flex-direction: column;
     }
-    
-    .columna-debe {
-        border-right: none;
-        border-bottom: 2px solid var(--color-borde);
+
+    .libros-section-header__actions {
+        width: 100%;
+        justify-content: stretch;
     }
-    
-    /* Pie del esquema T: apilado */
+
+    .libros-filter__select,
+    .libros-button {
+        width: 100%;
+    }
+
+    .libros-tabs-card {
+        border-radius: var(--ft-radius-lg);
+    }
+
+    .libros-tabs {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .libros-main {
+        padding-inline: 0.8rem;
+        padding-top: calc(4.5rem + 1.4rem);
+    }
+
+    .libros-hero {
+        padding: 1.4rem;
+        border-radius: var(--ft-radius-lg);
+    }
+
+    .libros-card {
+        padding: 1.1rem;
+    }
+    .libros-ledger-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cuerpo-mayor,
     .pie-mayor {
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
-    
+
+    .columna-debe {
+        border-right: 0;
+        border-bottom: 1px solid rgba(59, 34, 114, 0.10);
+    }
+
     .saldo-mayor:first-child {
-        border-right: none;
-        border-bottom: 1px solid var(--color-borde);
-    }
-    
-    /* Resumen de saldos: tabla compacta */
-    #tabla-resumen-saldos {
-        font-size: var(--tamano-pequeno);
-    }
-    
-    #tabla-resumen-saldos th,
-    #tabla-resumen-saldos td {
-        padding: 8px;
+        border-right: 0;
+        border-bottom: 1px solid rgba(59, 34, 114, 0.10);
     }
 }

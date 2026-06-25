@@ -72,6 +72,7 @@ body {
         radial-gradient(circle at 90% 8%, rgba(5, 150, 105, 0.10), transparent 22rem),
         var(--ft-gray-100);
     color: var(--ft-gray-950);
+    
 }
 
 * {
@@ -79,8 +80,41 @@ body {
     padding: 0;
 }
 
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+    scrollbar-width: thin; /* Hace la barra más delgada */
+    scrollbar-color: #5c22c5 #1a0933; /* Color del tirador (morado) y del fondo (oscuro) */
+}
+
+
+
+/* --- 2. Estilos para Chrome, Edge, Brave y Safari (WebKit) --- */
+/* Ancho total de la barra lateral */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* El fondo por donde se desliza la barra (Track) */
+::-webkit-scrollbar-track {
+  background: #1a0933; /* Combínalo con el tono oscuro de tu web */
+}
+
+/* La barrita arrastrable que se mueve al bajar (Thumb) */
+::-webkit-scrollbar-thumb {
+  background: #5c22c5; /* El morado de tu diseño */
+  border-radius: 10px; /* Bordes completamente circulares */
+  border: 2px solid #1a0933; /* Crea un pequeño espacio alrededor del tirador */
+}
+
+/* Efecto cuando el usuario pasa el mouse por encima */
+::-webkit-scrollbar-thumb:hover {
+  background: #7d3cf2; /* Un morado un poco más brillante */
+}
+
 .index-main {
-    padding: 2.4rem 1rem 3rem;
+    margin-top:0 ;
+    padding: calc(4.5rem + 2.4rem) 1rem 3rem;
 }
 
 .index-container {
@@ -98,10 +132,11 @@ strong {
    NAVBAR INDEX
 ========================================================= */
 .navegacion-principal--index {
-    position: sticky;
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 999;
+    right: 0;
+    z-index: 9999;
     width: 100%;
     min-height: 4.5rem;
     display: flex;
