@@ -72,6 +72,8 @@ body {
         radial-gradient(circle at 90% 8%, rgba(5, 150, 105, 0.10), transparent 22rem),
         var(--ft-gray-100);
     color: var(--ft-gray-950);
+    overflow-x: hidden;
+    width: 100%;
     
 }
 
@@ -85,6 +87,8 @@ html, body {
     overflow-x: hidden;
     scrollbar-width: thin; /* Hace la barra más delgada */
     scrollbar-color: #5c22c5 #1a0933; /* Color del tirador (morado) y del fondo (oscuro) */
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
 }
 
 
@@ -115,13 +119,16 @@ html, body {
 .index-main {
     margin-top:0 ;
     padding: calc(4.5rem + 2.4rem) 1rem 3rem;
+    overflow-x: clip;
 }
 
 .index-container {
     width: min(100%, 1180px);
     max-width: 1180px;
     margin-inline: auto;
+    overflow-x: clip;
 }
+
 
 strong {
     color: var(--ft-purple-800);
@@ -791,5 +798,69 @@ strong {
     .index-page .boton,
     .index-module-card .boton {
         width: 100%;
+    }
+}
+
+
+
+/* =========================================================
+   ANIMACIONES GLOBALES FINTRACK
+   Header + scroll reveal
+========================================================= */
+
+html.animaciones-activas .navegacion-principal--index {
+    opacity: 0;
+    transform: translate3d(0, -1.15rem, 0);
+    transition:
+        opacity 720ms ease,
+        transform 720ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.animaciones-activas .navegacion-principal--index.animacion-header-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+html.animaciones-activas .animacion-scroll {
+    opacity: 0;
+    transition:
+        opacity 760ms ease,
+        transform 760ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--animacion-delay, 0ms);
+    will-change: opacity, transform;
+}
+
+html.animaciones-activas .animacion-desde-abajo {
+    transform: translate3d(0, 2.2rem, 0);
+}
+
+html.animaciones-activas .animacion-desde-derecha {
+    transform: translate3d(1.2rem, 0, 0);
+}
+
+html.animaciones-activas .animacion-desde-izquierda {
+    transform: translate3d(-1.2rem, 0, 0);
+}
+
+html.animaciones-activas .animacion-scroll.animacion-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+/* Micro mejora visual cuando aparecen tarjetas */
+html.animaciones-activas .index-module-card.animacion-visible,
+html.animaciones-activas .index-concept-card.animacion-visible,
+html.animaciones-activas .index-card.animacion-visible {
+    will-change: auto;
+}
+
+/* Respeta accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    html.animaciones-activas .navegacion-principal--index,
+    html.animaciones-activas .animacion-scroll {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        will-change: auto;
     }
 }
