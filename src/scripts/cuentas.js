@@ -1,56 +1,63 @@
 /**
  * =============================================================================
- * cuentas.js - Lógica de la página Catálogo de Cuentas
+ * movimientos.js - Lógica de la página Registro de Movimientos
  * =============================================================================
  * 
- * Este archivo contiene toda la funcionalidad de la página cuentas.html:
- * crear nuevas cuentas, editar cuentas existentes, eliminar cuentas,
- * validar datos y renderizar la tabla de cuentas.
+ * Este archivo contiene toda la funcionalidad de la página movimientos.html:
+ * crear asientos contables, agregar/eliminar líneas dinámicamente,
+ * validar la partida doble en tiempo real, y renderizar la tabla de asientos.
  * 
- * La naturaleza de una cuenta (deudora o acreedora) determina cómo se
- * comporta en los asientos contables:
- * - Deudora: aumenta con el Debe, disminuye con el Haber
- * - Acreedora: aumenta con el Haber, disminuye con el Debe
+ * La partida doble es el principio fundamental de la contabilidad:
+ * por cada operación, el total cargado al Debe debe ser igual al total
+ * cargado al Haber. Esto asegura que la ecuación contable siempre esté
+ * equilibrada: Activos = Pasivos + Patrimonio.
  */
 
 // =============================================================================
 // REFERENCIAS A ELEMENTOS DEL DOM
 // =============================================================================
-// Guardamos referencias a los elementos que usaremos frecuentemente
-// para no tener que buscarlos en el DOM cada vez que los necesitamos.
 
-/** Formulario principal de creación/edición de cuentas */
-const formularioCuenta = document.getElementById('formulario-cuenta');
+/** Formulario principal de creación de asientos */
+const formularioAsiento = document.getElementById('formulario-asiento');
 
-/** Campo oculto que almacena el ID cuando estamos editando */
-const campoIdCuenta = document.getElementById('campo-id-cuenta');
+/** Campo del número de asiento (se asigna automáticamente) */
+const campoNumeroAsiento = document.getElementById('campo-numero-asiento');
 
-/** Campo de texto para el nombre de la cuenta */
-const campoNombre = document.getElementById('campo-nombre');
+/** Campo de fecha del asiento */
+const campoFecha = document.getElementById('campo-fecha');
 
-/** Campo select para el tipo de cuenta */
-const campoTipo = document.getElementById('campo-tipo');
-
-/** Campo textarea para la descripción */
+/** Campo de descripción del asiento */
 const campoDescripcion = document.getElementById('campo-descripcion');
 
-/** Título del formulario que cambia según el modo (crear/editar) */
-const tituloFormulario = document.getElementById('titulo-formulario');
+/** Contenedor donde se agregan dinámicamente las líneas del asiento */
+const contenedorLineas = document.getElementById('contenedor-lineas');
 
-/** Botón de guardar que cambia de texto según el modo */
-const botonGuardar = document.getElementById('boton-guardar');
+/** Botón para agregar una nueva línea al asiento */
+const botonAgregarLinea = document.getElementById('boton-agregar-linea');
 
-/** Botón para cancelar la edición (aparece solo en modo edición) */
-const botonCancelar = document.getElementById('boton-cancelar');
+/** Span que muestra el total del Debe */
+const totalDebe = document.getElementById('total-debe');
 
-/** Div donde mostramos mensajes de validación (éxito o error) */
-const mensajeFormulario = document.getElementById('mensaje-formulario');
+/** Span que muestra el total del Haber */
+const totalHaber = document.getElementById('total-haber');
 
-/** Cuerpo de la tabla donde se listan las cuentas */
-const cuerpoTablaCuentas = document.getElementById('cuerpo-tabla-cuentas');
+/** Span que muestra la diferencia entre Debe y Haber */
+const diferencia = document.getElementById('diferencia');
 
-/** Mensaje que se muestra cuando no hay cuentas registradas */
-const mensajeSinCuentas = document.getElementById('mensaje-sin-cuentas');
+/** Div que muestra mensajes de validación de la partida doble */
+const mensajePartidaDoble = document.getElementById('mensaje-partida-doble');
+
+/** Botón para registrar el asiento (solo activo si cuadra) */
+const botonRegistrar = document.getElementById('boton-registrar');
+
+/** Botón para limpiar todo el formulario */
+const botonLimpiar = document.getElementById('boton-limpiar');
+
+/** Cuerpo de la tabla donde se listan los asientos registrados */
+const cuerpoTablaAsientos = document.getElementById('cuerpo-tabla-asientos');
+
+/** Mensaje que se muestra cuando no hay asientos */
+const mensajeSinAsientos = document.getElementById('mensaje-sin-asientos');
 
 /** Botón para restablecer los datos originales del ejercicio */
 const botonRestablecer = document.getElementById('boton-restablecer');
@@ -59,274 +66,500 @@ const botonRestablecer = document.getElementById('boton-restablecer');
 const botonImprimir = document.getElementById('boton-imprimir');
 
 // =============================================================================
-// ESTADO DE LA PÁGINA
+// CONTADOR DE LÍNEAS
 // =============================================================================
-/** Indica si estamos en modo edición (true) o creación (false) */
-let modoEdicion = false;
+/** Lleva el control de cuántas líneas tiene el asiento actual */
+let contadorLineas = 0;
 
 // =============================================================================
-// FUNCIONES DE RENDERIZADO
+// FUNCIONES DE INICIALIZACIÓN
 // =============================================================================
 
 /**
- * Renderiza la tabla de cuentas con los datos actuales del array global.
- * Se ejecuta al cargar la página y cada vez que hay cambios.
+ * Inicializa el formulario al cargar la página.
+ * Asigna el siguiente número de asiento, establece la fecha actual
+ * y crea las primeras 2 líneas del asiento (mínimo requerido).
  */
-function renderizarTablaCuentas() {
-    // Limpiamos el contenido actual de la tabla
-    limpiarContenido(cuerpoTablaCuentas);
+function inicializarFormulario() {
+    // Asignamos el siguiente número de asiento disponible
+    campoNumeroAsiento.value = obtenerSiguienteNumeroAsiento();
     
-    // Si no hay cuentas, mostramos el mensaje de vacío y ocultamos la tabla
-    if (cuentas.length === 0) {
-        mensajeSinCuentas.classList.remove('oculto');
-        document.getElementById('tabla-cuentas').style.display = 'none';
+    // Establecemos la fecha actual por defecto
+    campoFecha.value = obtenerFechaActual();
+    
+    // Creamos las primeras 2 líneas (mínimo para un asiento válido)
+    agregarLinea();
+    agregarLinea();
+}
+
+// =============================================================================
+// FUNCIONES DE LÍNEAS DINÁMICAS
+// =============================================================================
+
+/**
+ * Crea y agrega una nueva línea al asiento contable.
+ * Cada línea contiene: select de cuenta, radio Debe/Haber, input de monto,
+ * y botón para eliminar la línea.
+ */
+function agregarLinea() {
+    contadorLineas++;
+    
+    // Creamos el contenedor de la línea
+    const linea = document.createElement('div');
+    linea.className = 'linea-asiento';
+    linea.setAttribute('data-indice', contadorLineas);
+    linea.id = 'linea-' + contadorLineas;
+    
+    // HTML interno de la línea
+    linea.innerHTML = `
+        <div class="grupo-linea">
+            <label class="etiqueta-formulario">Cuenta *</label>
+            <select class="campo-seleccion campo-cuenta" required>
+                <option value="">-- Seleccione una cuenta --</option>
+                ${generarOpcionesCuentas()}
+            </select>
+        </div>
+        
+        <div class="grupo-linea">
+            <span class="etiqueta-formulario">Movimiento *</span>
+            <div class="grupo-radio grupo-radio-compacto">
+                <label class="opcion-radio">
+                    <input type="radio" name="tipo-${contadorLineas}" value="debe" checked>
+                    <span class="texto-debe">Debe</span>
+                </label>
+                <label class="opcion-radio">
+                    <input type="radio" name="tipo-${contadorLineas}" value="haber">
+                    <span class="texto-haber">Haber</span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="grupo-linea">
+            <label class="etiqueta-formulario">Monto *</label>
+            <input 
+                type="number" 
+                class="campo-numero campo-monto" 
+                placeholder="0.00" 
+                min="0.01" 
+                step="0.01" 
+                required
+            >
+        </div>
+        
+        <div class="grupo-linea grupo-boton-eliminar">
+            <button type="button" class="boton boton-peligro boton-pequeno boton-eliminar-linea" data-linea="${contadorLineas}">
+                Eliminar
+            </button>
+        </div>
+    `;
+    
+    // Agregamos la línea al contenedor
+    contenedorLineas.appendChild(linea);
+    
+    // Agregamos event listeners a los inputs de monto para calcular totales en tiempo real
+    const campoMonto = linea.querySelector('.campo-monto');
+    campoMonto.addEventListener('input', calcularTotales);
+    
+    // Agregamos event listener al botón de eliminar línea
+    const botonEliminar = linea.querySelector('.boton-eliminar-linea');
+    botonEliminar.addEventListener('click', function() {
+        eliminarLinea(contadorLineas);
+    });
+    
+    // Recalculamos los totales
+    calcularTotales();
+}
+
+/**
+ * Genera las opciones del select de cuentas a partir del catálogo global.
+ * 
+ * @returns {string} String con las opciones HTML de las cuentas
+ */
+function generarOpcionesCuentas() {
+    let opciones = '';
+    
+    // Recorremos el array de cuentas y creamos una opción por cada una
+    for (let i = 0; i < cuentas.length; i++) {
+        const cuenta = cuentas[i];
+        opciones += `<option value="${cuenta.nombre}">${cuenta.nombre} (${cuenta.tipo})</option>`;
+    }
+    
+    return opciones;
+}
+
+/**
+ * Elimina una línea del asiento por su índice.
+ * No permite eliminar si solo quedan 2 líneas (mínimo requerido).
+ * 
+ * @param {number} indice - El índice de la línea a eliminar
+ */
+function eliminarLinea(indice) {
+    // Contamos cuántas líneas hay actualmente
+    const lineasActuales = contenedorLineas.querySelectorAll('.linea-asiento');
+    
+    // No permitimos eliminar si solo quedan 2 líneas
+    if (lineasActuales.length <= 2) {
+        alert('Un asiento debe tener mínimo 2 líneas (una al Debe y una al Haber).');
         return;
     }
     
-    // Hay cuentas: ocultamos el mensaje de vacío y mostramos la tabla
-    mensajeSinCuentas.classList.add('oculto');
-    document.getElementById('tabla-cuentas').style.display = 'table';
-    
-    // Recorremos el array de cuentas y creamos una fila por cada una
-    for (let i = 0; i < cuentas.length; i++) {
-        const cuenta = cuentas[i];
-        const fila = crearFilaCuenta(cuenta, true);
-        cuerpoTablaCuentas.appendChild(fila);
+    // Buscamos la línea a eliminar
+    const lineaEliminar = document.getElementById('linea-' + indice);
+    if (lineaEliminar) {
+        lineaEliminar.remove();
+        calcularTotales();
     }
 }
 
 // =============================================================================
-// FUNCIONES DE VALIDACIÓN
+// FUNCIONES DE CÁLCULO Y VALIDACIÓN EN TIEMPO REAL
 // =============================================================================
 
 /**
- * Valida que los datos del formulario sean correctos antes de guardar.
- * 
- * @returns {object|null} Objeto con los datos si son válidos, null si hay errores
+ * Calcula los totales del Debe y Haber en tiempo real.
+ * Se ejecuta cada vez que el usuario modifica un monto.
+ * Actualiza el indicador visual y habilita/deshabilita el botón de registrar.
  */
-function validarFormulario() {
-    // Obtenemos los valores de los campos
-    const nombre = campoNombre.value.trim();
-    const tipo = campoTipo.value;
-    const descripcion = campoDescripcion.value.trim();
+function calcularTotales() {
+    let sumaDebe = 0;
+    let sumaHaber = 0;
     
-    // Obtenemos el valor del radio button seleccionado (naturaleza)
-    const radioNaturaleza = document.querySelector('input[name="naturaleza"]:checked');
-    const naturaleza = radioNaturaleza ? radioNaturaleza.value : '';
+    // Obtenemos todas las líneas del asiento
+    const lineas = contenedorLineas.querySelectorAll('.linea-asiento');
     
-    // Validación 1: El nombre es obligatorio y debe tener al menos 3 caracteres
-    if (nombre.length < 3) {
-        mostrarMensajeFormulario('El nombre de la cuenta debe tener al menos 3 caracteres.', 'error');
-        return null;
-    }
-    
-    // Validación 2: El tipo es obligatorio
-    if (!tipo) {
-        mostrarMensajeFormulario('Debes seleccionar un tipo de cuenta.', 'error');
-        return null;
-    }
-    
-    // Validación 3: La naturaleza es obligatoria
-    if (!naturaleza) {
-        mostrarMensajeFormulario('Debes seleccionar la naturaleza de la cuenta.', 'error');
-        return null;
-    }
-    
-    // Validación 4: No permitir nombres duplicados
-    // Si estamos editando, permitimos que conserve su propio nombre
-    const idEditando = modoEdicion ? parseInt(campoIdCuenta.value) : null;
-    
-    for (let i = 0; i < cuentas.length; i++) {
-        // Comparamos en minúsculas para evitar duplicados por diferencia de mayúsculas
-        if (cuentas[i].nombre.toLowerCase() === nombre.toLowerCase()) {
-            // Si estamos editando, ignoramos la cuenta que estamos editando
-            if (modoEdicion && cuentas[i].id === idEditando) {
-                continue;
-            }
-            mostrarMensajeFormulario('Ya existe una cuenta con ese nombre.', 'error');
-            return null;
+    // Recorremos cada línea sumando según el tipo seleccionado
+    for (let i = 0; i < lineas.length; i++) {
+        const linea = lineas[i];
+        const montoInput = linea.querySelector('.campo-monto');
+        const tipoRadio = linea.querySelector('input[type="radio"]:checked');
+        
+        // Si hay un monto válido y un tipo seleccionado, acumulamos
+        const monto = parseFloat(montoInput.value) || 0;
+        
+        if (tipoRadio && tipoRadio.value === 'debe') {
+            sumaDebe += monto;
+        } else if (tipoRadio && tipoRadio.value === 'haber') {
+            sumaHaber += monto;
         }
     }
     
-    // Si todo está bien, devolvemos los datos validados
-    return {
-        nombre: nombre,
-        tipo: tipo,
-        naturaleza: naturaleza,
-        descripcion: descripcion
-    };
+    // Calculamos la diferencia
+    const diff = sumaDebe - sumaHaber;
+    
+    // Actualizamos los valores en pantalla
+    totalDebe.textContent = formatearMoneda(sumaDebe);
+    totalHaber.textContent = formatearMoneda(sumaHaber);
+    diferencia.textContent = formatearMoneda(Math.abs(diff));
+    
+    // Cambiamos el color de la diferencia según el estado
+    if (diff === 0 && sumaDebe > 0) {
+        // Cuadra perfectamente y hay montos
+        diferencia.style.color = 'var(--color-exito)';
+        mostrarMensajePartidaDoble('¡El asiento cuadra! Puedes registrarlo.', 'exito');
+        botonRegistrar.disabled = false;
+    } else if (diff === 0 && sumaDebe === 0) {
+        // No hay montos ingresados aún
+        diferencia.style.color = 'var(--texto-secundario)';
+        ocultarMensajePartidaDoble();
+        botonRegistrar.disabled = true;
+    } else {
+        // No cuadra
+        diferencia.style.color = 'var(--color-error)';
+        mostrarMensajePartidaDoble('El asiento no cuadra. Diferencia: ' + formatearMoneda(Math.abs(diff)), 'error');
+        botonRegistrar.disabled = true;
+    }
 }
 
 /**
- * Muestra un mensaje de validación en el formulario.
+ * Muestra un mensaje de validación de la partida doble.
  * 
  * @param {string} texto - El mensaje a mostrar
  * @param {string} tipo - 'exito' o 'error'
  */
-function mostrarMensajeFormulario(texto, tipo) {
-    mensajeFormulario.textContent = texto;
-    mensajeFormulario.className = 'mensaje-validacion ' + tipo;
-    mensajeFormulario.classList.remove('oculto');
-    
-    // Ocultamos el mensaje automáticamente después de 5 segundos
-    setTimeout(function() {
-        mensajeFormulario.classList.add('oculto');
-    }, 5000);
+function mostrarMensajePartidaDoble(texto, tipo) {
+    mensajePartidaDoble.textContent = texto;
+    mensajePartidaDoble.className = 'mensaje-validacion ' + tipo;
+    mensajePartidaDoble.classList.remove('oculto');
+}
+
+/**
+ * Oculta el mensaje de validación de la partida doble.
+ */
+function ocultarMensajePartidaDoble() {
+    mensajePartidaDoble.classList.add('oculto');
 }
 
 // =============================================================================
-// FUNCIONES DE CREACIÓN Y EDICIÓN
+// FUNCIONES DE VALIDACIÓN DEL ASIENTO
 // =============================================================================
 
 /**
- * Crea una nueva cuenta con los datos del formulario.
- * Asigna automáticamente el siguiente ID disponible.
+ * Valida que el asiento cumpla con todos los requisitos antes de registrarlo.
+ * 
+ * @returns {object|null} Objeto con los datos del asiento si es válido, null si hay errores
  */
-function crearCuenta() {
-    const datos = validarFormulario();
-    if (!datos) return; // Si la validación falla, no continuamos
-    
-    // Calculamos el siguiente ID (el mayor existente + 1)
-    let idMayor = 0;
-    for (let i = 0; i < cuentas.length; i++) {
-        if (cuentas[i].id > idMayor) {
-            idMayor = cuentas[i].id;
-        }
+function validarAsiento() {
+    // Validación 1: Fecha obligatoria
+    if (!campoFecha.value) {
+        alert('Debes seleccionar una fecha para el asiento.');
+        campoFecha.focus();
+        return null;
     }
     
-    // Creamos el objeto cuenta
-    const nuevaCuenta = {
-        id: idMayor + 1,
-        nombre: datos.nombre,
-        tipo: datos.tipo,
-        naturaleza: datos.naturaleza,
-        descripcion: datos.descripcion
+    // Validación 2: Descripción obligatoria
+    const descripcion = campoDescripcion.value.trim();
+    if (!descripcion) {
+        alert('Debes escribir una descripción para el asiento.');
+        campoDescripcion.focus();
+        return null;
+    }
+    
+    // Validación 3: Mínimo 2 líneas
+    const lineas = contenedorLineas.querySelectorAll('.linea-asiento');
+    if (lineas.length < 2) {
+        alert('Un asiento debe tener mínimo 2 líneas.');
+        return null;
+    }
+    
+    // Validación 4: Cada línea debe tener cuenta, tipo y monto válido
+    const lineasAsiento = [];
+    let sumaDebe = 0;
+    let sumaHaber = 0;
+    
+    for (let i = 0; i < lineas.length; i++) {
+        const linea = lineas[i];
+        const selectCuenta = linea.querySelector('.campo-cuenta');
+        const tipoRadio = linea.querySelector('input[type="radio"]:checked');
+        const montoInput = linea.querySelector('.campo-monto');
+        
+        const cuenta = selectCuenta.value;
+        const tipo = tipoRadio ? tipoRadio.value : '';
+        const monto = parseFloat(montoInput.value);
+        
+        // Validamos que haya una cuenta seleccionada
+        if (!cuenta) {
+            alert('Debes seleccionar una cuenta en todas las líneas del asiento.');
+            selectCuenta.focus();
+            return null;
+        }
+        
+        // Validamos que haya un tipo seleccionado
+        if (!tipo) {
+            alert('Debes seleccionar si el movimiento es al Debe o al Haber en todas las líneas.');
+            return null;
+        }
+        
+        // Validamos que el monto sea mayor a cero
+        if (isNaN(monto) || monto <= 0) {
+            alert('El monto debe ser mayor a cero en todas las líneas del asiento.');
+            montoInput.focus();
+            return null;
+        }
+        
+        // Acumulamos para verificar la partida doble
+        if (tipo === 'debe') {
+            sumaDebe += monto;
+        } else {
+            sumaHaber += monto;
+        }
+        
+        // Agregamos la línea al array
+        lineasAsiento.push({
+            cuenta: cuenta,
+            tipo: tipo,
+            monto: monto
+        });
+    }
+    
+    // Validación 5: La partida doble debe cuadrar
+    if (sumaDebe !== sumaHaber) {
+        alert('La partida doble no cuadra. Total Debe: ' + formatearMoneda(sumaDebe) + 
+              ' | Total Haber: ' + formatearMoneda(sumaHaber));
+        return null;
+    }
+    
+    // Si todo está bien, devolvemos los datos del asiento
+    return {
+        numero: parseInt(campoNumeroAsiento.value),
+        fecha: campoFecha.value,
+        descripcion: descripcion,
+        lineas: lineasAsiento
+    };
+}
+
+// =============================================================================
+// FUNCIONES DE CREACIÓN Y REGISTRO
+// =============================================================================
+
+/**
+ * Registra un nuevo asiento contable en el array global.
+ * Se ejecuta al enviar el formulario si todas las validaciones pasan.
+ */
+function registrarAsiento() {
+    const datos = validarAsiento();
+    if (!datos) return; // Si la validación falla, no continuamos
+    
+    // Creamos el objeto asiento
+    const nuevoAsiento = {
+        numero: datos.numero,
+        fecha: datos.fecha,
+        descripcion: datos.descripcion,
+        lineas: datos.lineas
     };
     
-    // Agregamos la nueva cuenta al array global
-    cuentas.push(nuevaCuenta);
+    // Agregamos el asiento al array global
+    asientos.push(nuevoAsiento);
     
-    // Actualizamos la tabla
-    renderizarTablaCuentas();
+    // Actualizamos la tabla de asientos registrados
+    renderizarTablaAsientos();
     
-    // Limpiamos el formulario
+    // Limpiamos el formulario para un nuevo asiento
     limpiarFormulario();
     
     // Mostramos mensaje de éxito
-    mostrarMensajeFormulario('La cuenta "' + nuevaCuenta.nombre + '" ha sido creada exitosamente.', 'exito');
+    alert('El asiento número ' + nuevoAsiento.numero + ' ha sido registrado exitosamente.');
 }
 
 /**
- * Prepara el formulario para editar una cuenta existente.
- * Carga los datos de la cuenta en los campos del formulario.
- * 
- * @param {number} id - El ID de la cuenta a editar
- */
-function iniciarEdicion(id) {
-    // Buscamos la cuenta en el array
-    let cuentaEditar = null;
-    for (let i = 0; i < cuentas.length; i++) {
-        if (cuentas[i].id === id) {
-            cuentaEditar = cuentas[i];
-            break;
-        }
-    }
-    
-    // Si no encontramos la cuenta, salimos
-    if (!cuentaEditar) return;
-    
-    // Activamos el modo edición
-    modoEdicion = true;
-    
-    // Cargamos los datos en el formulario
-    campoIdCuenta.value = cuentaEditar.id;
-    campoNombre.value = cuentaEditar.nombre;
-    campoTipo.value = cuentaEditar.tipo;
-    campoDescripcion.value = cuentaEditar.descripcion || '';
-    
-    // Seleccionamos el radio button correspondiente a la naturaleza
-    const radiosNaturaleza = document.querySelectorAll('input[name="naturaleza"]');
-    for (let i = 0; i < radiosNaturaleza.length; i++) {
-        if (radiosNaturaleza[i].value === cuentaEditar.naturaleza) {
-            radiosNaturaleza[i].checked = true;
-            break;
-        }
-    }
-    
-    // Cambiamos el título y el texto del botón
-    tituloFormulario.textContent = 'Editar Cuenta';
-    botonGuardar.textContent = 'Guardar Cambios';
-    
-    // Mostramos el botón de cancelar
-    botonCancelar.classList.remove('oculto');
-    
-    // Ocultamos cualquier mensaje previo
-    mensajeFormulario.classList.add('oculto');
-    
-    // Hacemos scroll al formulario para que el usuario lo vea
-    formularioCuenta.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-/**
- * Guarda los cambios de una cuenta editada.
- */
-function guardarEdicion() {
-    const datos = validarFormulario();
-    if (!datos) return; // Si la validación falla, no continuamos
-    
-    const id = parseInt(campoIdCuenta.value);
-    
-    // Buscamos la cuenta en el array y actualizamos sus datos
-    for (let i = 0; i < cuentas.length; i++) {
-        if (cuentas[i].id === id) {
-            cuentas[i].nombre = datos.nombre;
-            cuentas[i].tipo = datos.tipo;
-            cuentas[i].naturaleza = datos.naturaleza;
-            cuentas[i].descripcion = datos.descripcion;
-            break;
-        }
-    }
-    
-    // Actualizamos la tabla
-    renderizarTablaCuentas();
-    
-    // Volvemos al modo creación
-    cancelarEdicion();
-    
-    // Mostramos mensaje de éxito
-    mostrarMensajeFormulario('La cuenta ha sido actualizada exitosamente.', 'exito');
-}
-
-/**
- * Cancela el modo edición y vuelve al modo creación.
- * Limpia el formulario y restaura los textos originales.
- */
-function cancelarEdicion() {
-    modoEdicion = false;
-    limpiarFormulario();
-    
-    // Restauramos el título y el botón
-    tituloFormulario.textContent = 'Agregar Nueva Cuenta';
-    botonGuardar.textContent = 'Agregar Cuenta';
-    
-    // Ocultamos el botón de cancelar
-    botonCancelar.classList.add('oculto');
-    
-    // Limpiamos el campo oculto de ID
-    campoIdCuenta.value = '';
-}
-
-/**
- * Limpia todos los campos del formulario y los mensajes.
+ * Limpia el formulario y prepara uno nuevo.
  */
 function limpiarFormulario() {
-    formularioCuenta.reset();
-    mensajeFormulario.classList.add('oculto');
+    // Limpiamos los campos básicos
+    campoDescripcion.value = '';
+    campoFecha.value = obtenerFechaActual();
     
-    // Desmarcamos los radio buttons
-    const radiosNaturaleza = document.querySelectorAll('input[name="naturaleza"]');
-    for (let i = 0; i < radiosNaturaleza.length; i++) {
-        radiosNaturaleza[i].checked = false;
+    // Eliminamos todas las líneas del asiento
+    limpiarContenido(contenedorLineas);
+    contadorLineas = 0;
+    
+    // Creamos 2 líneas nuevas (mínimo requerido)
+    agregarLinea();
+    agregarLinea();
+    
+    // Actualizamos el número de asiento
+    campoNumeroAsiento.value = obtenerSiguienteNumeroAsiento();
+    
+    // Ocultamos el mensaje de validación
+    ocultarMensajePartidaDoble();
+    
+    // Deshabilitamos el botón de registrar
+    botonRegistrar.disabled = true;
+    
+    // Reseteamos los totales
+    totalDebe.textContent = '$0.00';
+    totalHaber.textContent = '$0.00';
+    diferencia.textContent = '$0.00';
+    diferencia.style.color = 'var(--texto-secundario)';
+}
+
+// =============================================================================
+// FUNCIONES DE RENDERIZADO DE LA TABLA
+// =============================================================================
+
+/**
+ * Renderiza la tabla de asientos registrados con los datos actuales.
+ * Cada asiento se muestra con todas sus líneas, agrupadas visualmente.
+ */
+function renderizarTablaAsientos() {
+    // Limpiamos el contenido actual de la tabla
+    limpiarContenido(cuerpoTablaAsientos);
+    
+    // Si no hay asientos, mostramos el mensaje de vacío
+    if (asientos.length === 0) {
+        mensajeSinAsientos.classList.remove('oculto');
+        document.getElementById('tabla-asientos').style.display = 'none';
+        return;
+    }
+    
+    // Hay asientos: ocultamos el mensaje de vacío y mostramos la tabla
+    mensajeSinAsientos.classList.add('oculto');
+    document.getElementById('tabla-asientos').style.display = 'table';
+    
+    // Recorremos el array de asientos
+    for (let i = 0; i < asientos.length; i++) {
+        const asiento = asientos[i];
+        const lineas = asiento.lineas;
+        const totalLineas = lineas.length;
+        
+        // Recorremos cada línea del asiento
+        for (let j = 0; j < lineas.length; j++) {
+            const linea = lineas[j];
+            const fila = document.createElement('tr');
+            
+            // Si es la primera línea del asiento, agregamos celdas con rowspan
+            // para que el número, fecha, descripción y acciones ocupen varias filas
+            if (j === 0) {
+                // Celda del número de asiento
+                const celdaNumero = document.createElement('td');
+                celdaNumero.textContent = asiento.numero;
+                celdaNumero.rowSpan = totalLineas;
+                celdaNumero.className = 'celda-asiento';
+                fila.appendChild(celdaNumero);
+                
+                // Celda de la fecha
+                const celdaFecha = document.createElement('td');
+                celdaFecha.textContent = formatearFecha(asiento.fecha);
+                celdaFecha.rowSpan = totalLineas;
+                celdaFecha.className = 'celda-asiento';
+                fila.appendChild(celdaFecha);
+            }
+            
+            // Celda de la cuenta
+            const celdaCuenta = document.createElement('td');
+            celdaCuenta.textContent = linea.cuenta;
+            fila.appendChild(celdaCuenta);
+            
+            // Celda del Debe
+            const celdaDebe = document.createElement('td');
+            celdaDebe.className = 'celda-numero';
+            if (linea.tipo === 'debe') {
+                celdaDebe.textContent = formatearMoneda(linea.monto);
+                celdaDebe.classList.add('texto-debe');
+            } else {
+                celdaDebe.textContent = '-';
+            }
+            fila.appendChild(celdaDebe);
+            
+            // Celda del Haber
+            const celdaHaber = document.createElement('td');
+            celdaHaber.className = 'celda-numero';
+            if (linea.tipo === 'haber') {
+                celdaHaber.textContent = formatearMoneda(linea.monto);
+                celdaHaber.classList.add('texto-haber');
+            } else {
+                celdaHaber.textContent = '-';
+            }
+            fila.appendChild(celdaHaber);
+            
+            // Si es la primera línea, agregamos la descripción y el botón eliminar
+            if (j === 0) {
+                // Celda de la descripción
+                const celdaDescripcion = document.createElement('td');
+                celdaDescripcion.textContent = asiento.descripcion;
+                celdaDescripcion.rowSpan = totalLineas;
+                celdaDescripcion.className = 'celda-asiento celda-descripcion';
+                fila.appendChild(celdaDescripcion);
+                
+                // Celda de acciones (botón eliminar asiento completo)
+                const celdaAcciones = document.createElement('td');
+                celdaAcciones.rowSpan = totalLineas;
+                celdaAcciones.className = 'celda-asiento celda-acciones';
+                
+                const botonEliminar = document.createElement('button');
+                botonEliminar.textContent = 'Eliminar';
+                botonEliminar.className = 'boton boton-peligro boton-pequeno';
+                botonEliminar.setAttribute('data-numero', asiento.numero);
+                botonEliminar.addEventListener('click', function() {
+                    eliminarAsiento(asiento.numero);
+                });
+                
+                celdaAcciones.appendChild(botonEliminar);
+                fila.appendChild(celdaAcciones);
+            }
+            
+            // Agregamos la fila al cuerpo de la tabla
+            cuerpoTablaAsientos.appendChild(fila);
+        }
     }
 }
 
@@ -335,46 +568,34 @@ function limpiarFormulario() {
 // =============================================================================
 
 /**
- * Elimina una cuenta del catálogo después de confirmar con el usuario.
+ * Elimina un asiento completo del registro después de confirmar.
  * 
- * @param {number} id - El ID de la cuenta a eliminar
+ * @param {number} numero - El número del asiento a eliminar
  */
-function eliminarCuenta(id) {
-    // Buscamos el nombre de la cuenta para mostrarlo en la confirmación
-    let nombreCuenta = '';
-    for (let i = 0; i < cuentas.length; i++) {
-        if (cuentas[i].id === id) {
-            nombreCuenta = cuentas[i].nombre;
-            break;
-        }
-    }
-    
-    // Pedimos confirmación al usuario
+function eliminarAsiento(numero) {
     const confirmar = window.confirm(
-        '¿Estás seguro de que deseas eliminar la cuenta "' + nombreCuenta + '"?\n\n' +
+        '¿Estás seguro de que deseas eliminar el asiento número ' + numero + '?\n\n' +
         'Esta acción no se puede deshacer.'
     );
     
-    if (!confirmar) return; // El usuario canceló
+    if (!confirmar) return;
     
-    // Creamos un nuevo array sin la cuenta eliminada
-    const nuevasCuentas = [];
-    for (let i = 0; i < cuentas.length; i++) {
-        if (cuentas[i].id !== id) {
-            nuevasCuentas.push(cuentas[i]);
+    // Creamos un nuevo array sin el asiento eliminado
+    const nuevosAsientos = [];
+    for (let i = 0; i < asientos.length; i++) {
+        if (asientos[i].numero !== numero) {
+            nuevosAsientos.push(asientos[i]);
         }
     }
     
     // Reemplazamos el array global
-    cuentas = nuevasCuentas;
-    
-    // Si estábamos editando esta cuenta, cancelamos la edición
-    if (modoEdicion && parseInt(campoIdCuenta.value) === id) {
-        cancelarEdicion();
-    }
+    asientos = nuevosAsientos;
     
     // Actualizamos la tabla
-    renderizarTablaCuentas();
+    renderizarTablaAsientos();
+    
+    // Actualizamos el número de asiento en el formulario (por si cambió)
+    campoNumeroAsiento.value = obtenerSiguienteNumeroAsiento();
 }
 
 // =============================================================================
@@ -382,13 +603,13 @@ function eliminarCuenta(id) {
 // =============================================================================
 
 /**
- * Restablece las cuentas a los valores originales del ejercicio.
+ * Restablece los asientos a los valores originales del ejercicio.
  * Pide confirmación antes de ejecutar.
  */
 function confirmarRestablecer() {
     const confirmar = window.confirm(
-        '¿Deseas restablecer el catálogo de cuentas a los valores originales del ejercicio?\n\n' +
-        'Se perderán todas las cuentas agregadas o modificadas.'
+        '¿Deseas restablecer todos los asientos a los valores originales del ejercicio?\n\n' +
+        'Se perderán todos los asientos creados o modificados.'
     );
     
     if (!confirmar) return;
@@ -396,16 +617,13 @@ function confirmarRestablecer() {
     // Llamamos a la función global de datos.js
     restablecerEjercicio();
     
-    // Si estábamos editando, cancelamos
-    if (modoEdicion) {
-        cancelarEdicion();
-    }
+    // Limpiamos el formulario
+    limpiarFormulario();
     
     // Actualizamos la tabla
-    renderizarTablaCuentas();
+    renderizarTablaAsientos();
     
-    // Mostramos mensaje de éxito
-    mostrarMensajeFormulario('El ejercicio ha sido restablecido a los valores originales.', 'exito');
+    alert('El ejercicio ha sido restablecido a los valores originales.');
 }
 
 // =============================================================================
@@ -414,61 +632,38 @@ function confirmarRestablecer() {
 
 /**
  * Inicializa todos los event listeners de la página.
- * Se ejecuta cuando el DOM está completamente cargado.
  */
 function inicializarEventos() {
     
-    // Evento submit del formulario (crear o guardar edición)
-    formularioCuenta.addEventListener('submit', function(evento) {
-        // Prevenimos el envío tradicional del formulario (que recargaría la página)
+    // Evento submit del formulario (registrar asiento)
+    formularioAsiento.addEventListener('submit', function(evento) {
         evento.preventDefault();
-        
-        if (modoEdicion) {
-            guardarEdicion();
-        } else {
-            crearCuenta();
-        }
+        registrarAsiento();
     });
     
-    // Evento click en el botón cancelar edición
-    botonCancelar.addEventListener('click', cancelarEdicion);
+    // Evento click en el botón agregar línea
+    botonAgregarLinea.addEventListener('click', agregarLinea);
+    
+    // Evento click en el botón limpiar formulario
+    botonLimpiar.addEventListener('click', limpiarFormulario);
     
     // Evento click en el botón restablecer ejercicio
     botonRestablecer.addEventListener('click', confirmarRestablecer);
     
     // Evento click en el botón imprimir
     botonImprimir.addEventListener('click', imprimirPagina);
-    
-    // Delegación de eventos para los botones de la tabla (editar y eliminar)
-    // Usamos delegación porque las filas se generan dinámicamente
-    cuerpoTablaCuentas.addEventListener('click', function(evento) {
-        const boton = evento.target;
-        
-        // Verificamos si se hizo click en un botón de editar
-        if (boton.getAttribute('data-accion') === 'editar') {
-            const id = parseInt(boton.getAttribute('data-id'));
-            iniciarEdicion(id);
-        }
-        
-        // Verificamos si se hizo click en un botón de eliminar
-        if (boton.getAttribute('data-accion') === 'eliminar') {
-            const id = parseInt(boton.getAttribute('data-id'));
-            eliminarCuenta(id);
-        }
-    });
 }
 
 // =============================================================================
 // INICIALIZACIÓN DE LA PÁGINA
 // =============================================================================
 
-/**
- * Se ejecuta cuando el DOM está listo.
- * Renderiza la tabla inicial y configura los eventos.
- */
 document.addEventListener('DOMContentLoaded', function() {
-    // Renderizamos la tabla con las cuentas pre-cargadas
-    renderizarTablaCuentas();
+    // Inicializamos el formulario con valores por defecto
+    inicializarFormulario();
+    
+    // Renderizamos la tabla con los asientos pre-cargados
+    renderizarTablaAsientos();
     
     // Configuramos todos los event listeners
     inicializarEventos();

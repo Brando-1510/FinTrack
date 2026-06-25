@@ -259,9 +259,22 @@ const asientosOriginales = [
  * y evitar que las modificaciones afecten a los originales.
  */
 function cargarDatosIniciales() {
-    // Creamos copias profundas para que las variables globales sean independientes
-    cuentas = JSON.parse(JSON.stringify(cuentasOriginales));
-    asientos = JSON.parse(JSON.stringify(asientosOriginales));
+    const cuentasGuardadas = localStorage.getItem('fintrack_cuentas');
+    const asientosGuardados = localStorage.getItem('fintrack_asientos');
+
+    if (cuentasGuardadas && asientosGuardados) {
+        cuentas = JSON.parse(cuentasGuardadas);
+        asientos = JSON.parse(asientosGuardados);
+    } else {
+        cuentas = JSON.parse(JSON.stringify(cuentasOriginales));
+        asientos = JSON.parse(JSON.stringify(asientosOriginales));
+        guardarDatos();
+    }
+}
+
+function guardarDatos() {
+    localStorage.setItem('fintrack_cuentas', JSON.stringify(cuentas));
+    localStorage.setItem('fintrack_asientos', JSON.stringify(asientos));
 }
 
 /**
@@ -273,16 +286,17 @@ function cargarDatosIniciales() {
  * las otras páginas puedan actualizar sus vistas si es necesario.
  */
 function restablecerEjercicio() {
-    cargarDatosIniciales();
-    
-    // Disparamos un evento para notificar a otras páginas que los datos cambiaron
-    // Esto es útil si en el futuro se quiere sincronizar entre pestañas
+    cuentas = JSON.parse(JSON.stringify(cuentasOriginales));
+    asientos = JSON.parse(JSON.stringify(asientosOriginales));
+
+    guardarDatos();
+
     const eventoDatosRestablecidos = new CustomEvent('datosRestablecidos', {
         detail: { mensaje: 'Los datos han sido restablecidos a los valores originales' }
     });
+
     document.dispatchEvent(eventoDatosRestablecidos);
 }
-
 // =============================================================================
 // DATOS AUXILIARES PARA EL ANÁLISIS DE LA OPERACIÓN
 // =============================================================================
@@ -298,6 +312,7 @@ const inventarioInicial = 800000;
  * Se determina por conteo físico al final del período.
  */
 const inventarioFinal = 600000;
+
 
 // =============================================================================
 // INICIALIZACIÓN AUTOMÁTICA

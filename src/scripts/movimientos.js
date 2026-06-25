@@ -409,6 +409,9 @@ function registrarAsiento() {
     
     // Agregamos el asiento al array global
     asientos.push(nuevoAsiento);
+
+    // Guardamos los datos en localStorage
+    guardarDatos();
     
     // Actualizamos la tabla de asientos registrados
     renderizarTablaAsientos();
@@ -590,6 +593,9 @@ function eliminarAsiento(numero) {
     
     // Reemplazamos el array global
     asientos = nuevosAsientos;
+
+    // Guardamos los datos en localStorage
+    guardarDatos();
     
     // Actualizamos la tabla
     renderizarTablaAsientos();
