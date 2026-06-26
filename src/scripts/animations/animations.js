@@ -8,14 +8,24 @@
  * - Secciones aparecen desde abajo al hacer scroll.
  * - Contenido interno aparece lateralmente según su posición visual.
  *
+ * Funciona para:
+ * - index.html
+ * - cuentas.html
+ * - movimientos.html
  */
 
 document.documentElement.classList.add('animaciones-activas');
 
-document.addEventListener('DOMContentLoaded', function () {
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inicializarAnimacionesGlobales);
+} else {
+    inicializarAnimacionesGlobales();
+}
+
+function inicializarAnimacionesGlobales() {
     inicializarAnimacionHeader();
     inicializarAnimacionesScroll();
-});
+}
 
 /**
  * Anima el header principal al cargar la página.
@@ -35,8 +45,9 @@ function inicializarAnimacionHeader() {
  */
 function inicializarAnimacionesScroll() {
     const usuarioPrefiereReducirMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     const elementosAnimables = obtenerElementosAnimables();
+
+    if (elementosAnimables.length === 0) return;
 
     if (usuarioPrefiereReducirMovimiento) {
         mostrarElementosSinAnimacion(elementosAnimables);
@@ -58,8 +69,8 @@ function inicializarAnimacionesScroll() {
             }
         });
     }, {
-        threshold: 0.18,
-        rootMargin: '0px 0px -8% 0px'
+        threshold: 0.16,
+        rootMargin: '0px 0px -7% 0px'
     });
 
     elementosAnimables.forEach(function (elemento) {
@@ -68,24 +79,53 @@ function inicializarAnimacionesScroll() {
 }
 
 /**
- * Obtiene elementos del index que deben animarse.
+ * Obtiene elementos animables de todas las páginas principales.
  */
 function obtenerElementosAnimables() {
     const selectores = [
+        /* INDEX */
         '.index-hero',
         '.index-card',
         '.index-explore',
         '.index-concepts',
         '.index-footer',
-
         '.index-hero__content',
         '.index-hero__panel',
-
         '.index-card__header',
         '.index-card__body',
-
         '.index-module-card',
-        '.index-concept-card'
+        '.index-concept-card',
+
+        /* CATÁLOGO DE CUENTAS */
+        '.cuentas-hero',
+        '.cuentas-layout',
+        '.cuentas-card',
+        '.cuentas-footer',
+        '.cuentas-hero__content',
+        '.cuentas-hero__panel',
+        '.cuentas-card__header',
+        '.cuentas-form__group',
+        '.cuentas-form__actions',
+        '.cuentas-table-card__header',
+        '.cuentas-table-wrapper',
+        '.cuentas-empty-state',
+
+        /* REGISTRO DE MOVIMIENTOS */
+        '.movimientos-hero',
+        '.movimientos-layout',
+        '.movimientos-card',
+        '.movimientos-footer',
+        '.movimientos-hero__content',
+        '.movimientos-hero__panel',
+        '.movimientos-card__header',
+        '.movimientos-form__group',
+        '.movimientos-lines__header',
+        '.movimientos-totals',
+        '.movimientos-form__actions',
+        '.movimientos-table-card__header',
+        '.movimientos-table-wrapper',
+        '.movimientos-empty-state',
+        '#contenedor-lineas > *'
     ];
 
     return Array.from(document.querySelectorAll(selectores.join(', ')));
@@ -112,7 +152,7 @@ function prepararElementosAnimables(elementos) {
             elemento.classList.add('animacion-desde-izquierda');
         }
 
-        const delay = Math.min(indice * 45, 260);
+        const delay = Math.min(indice * 35, 240);
         elemento.style.setProperty('--animacion-delay', delay + 'ms');
     });
 }
@@ -126,15 +166,22 @@ function esSeccionPrincipal(elemento) {
         elemento.classList.contains('index-card') ||
         elemento.classList.contains('index-explore') ||
         elemento.classList.contains('index-concepts') ||
-        elemento.classList.contains('index-footer')
+        elemento.classList.contains('index-footer') ||
+
+        elemento.classList.contains('cuentas-hero') ||
+        elemento.classList.contains('cuentas-layout') ||
+        elemento.classList.contains('cuentas-card') ||
+        elemento.classList.contains('cuentas-footer') ||
+
+        elemento.classList.contains('movimientos-hero') ||
+        elemento.classList.contains('movimientos-layout') ||
+        elemento.classList.contains('movimientos-card') ||
+        elemento.classList.contains('movimientos-footer')
     );
 }
 
 /**
  * Detecta si el elemento está visualmente a la izquierda o derecha.
- *
- * Si está a la derecha: entra desde la derecha hacia su posición.
- * Si está a la izquierda: entra desde la izquierda hacia su posición.
  */
 function obtenerDireccionLateral(elemento) {
     const rect = elemento.getBoundingClientRect();

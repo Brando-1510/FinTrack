@@ -852,3 +852,81 @@
         width: 100%;
     }
 }
+
+/* =========================================================
+   ANIMACIONES MOVIMIENTOS
+   Scroll reveal limpio sin romper formulario ni tablas.
+========================================================= */
+
+html {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+}
+
+body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.movimientos-main,
+.movimientos-container {
+    overflow-x: clip;
+}
+
+html.animaciones-activas .navegacion-principal--index {
+    opacity: 0;
+    transform: translate3d(0, -1.15rem, 0);
+    transition:
+        opacity 720ms ease,
+        transform 720ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.animaciones-activas .navegacion-principal--index.animacion-header-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+html.animaciones-activas .animacion-scroll {
+    opacity: 0;
+    transition:
+        opacity 760ms ease,
+        transform 760ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--animacion-delay, 0ms);
+    will-change: opacity, transform;
+}
+
+html.animaciones-activas .animacion-desde-abajo {
+    transform: translate3d(0, 2rem, 0);
+}
+
+html.animaciones-activas .animacion-desde-derecha {
+    transform: translate3d(1.2rem, 0, 0);
+}
+
+html.animaciones-activas .animacion-desde-izquierda {
+    transform: translate3d(-1.2rem, 0, 0);
+}
+
+html.animaciones-activas .animacion-scroll.animacion-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+html.animaciones-activas .movimientos-card.animacion-visible:hover {
+    transform: translateY(-2px);
+}
+
+html.animaciones-activas .animacion-visible {
+    will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html.animaciones-activas .navegacion-principal--index,
+    html.animaciones-activas .animacion-scroll {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        will-change: auto;
+    }
+}
