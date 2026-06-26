@@ -158,7 +158,7 @@ const asientosOriginales = [
         fecha: "2024-01-02",
         descripcion: "Apertura de la empresa. Se aporta efectivo e inventario inicial.",
         lineas: [
-            { cuenta: "Caja", tipo: "debe", monto: 1000000 },
+            { cuenta: "Caja", tipo: "debe", monto: 100000 },
             { cuenta: "Inventario", tipo: "debe", monto: 700000 },
             { cuenta: "Capital", tipo: "haber", monto: 800000 }
         ]
