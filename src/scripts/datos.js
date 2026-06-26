@@ -155,96 +155,96 @@ const cuentasOriginales = [
 const asientosOriginales = [
     {
         numero: 1,
-        fecha: "2024-01-01",
+        fecha: "2024-01-02",
         descripcion: "Apertura de la empresa. Se aporta efectivo e inventario inicial.",
         lineas: [
-            { cuenta: "Caja", tipo: "debe", monto: 200000 },
-            { cuenta: "Inventario", tipo: "debe", monto: 800000 },
-            { cuenta: "Capital", tipo: "haber", monto: 1000000 }
+            { cuenta: "Caja", tipo: "debe", monto: 1000000 },
+            { cuenta: "Inventario", tipo: "debe", monto: 700000 },
+            { cuenta: "Capital", tipo: "haber", monto: 8000000 }
         ]
     },
     {
         numero: 2,
-        fecha: "2024-01-05",
+        fecha: "2024-01-09",
         descripcion: "Venta de mercancía. Parte en efectivo y parte a crédito.",
         lineas: [
-            { cuenta: "Caja", tipo: "debe", monto: 490000 },
-            { cuenta: "Clientes", tipo: "debe", monto: 210000 },
-            { cuenta: "Ventas", tipo: "haber", monto: 700000 }
+            { cuenta: "Caja", tipo: "debe", monto: 300000 },
+            { cuenta: "Clientes", tipo: "debe", monto: 300000 },
+            { cuenta: "Ventas", tipo: "haber", monto: 600000 }
         ]
     },
     {
         numero: 3,
-        fecha: "2024-01-08",
+        fecha: "2024-01-15",
         descripcion: "Devolución de mercancía por parte de un cliente.",
         lineas: [
-            { cuenta: "Devoluciones sobre ventas", tipo: "debe", monto: 50000 },
-            { cuenta: "Clientes", tipo: "haber", monto: 50000 }
+            { cuenta: "Devoluciones sobre ventas", tipo: "debe", monto: 40000 },
+            { cuenta: "Clientes", tipo: "haber", monto: 40000 }
         ]
     },
     {
         numero: 4,
-        fecha: "2024-01-10",
+        fecha: "2024-01-18",
         descripcion: "Descuento por pronto pago otorgado a un cliente.",
         lineas: [
-            { cuenta: "Descuentos sobre ventas", tipo: "debe", monto: 25000 },
-            { cuenta: "Clientes", tipo: "haber", monto: 25000 }
+            { cuenta: "Descuentos sobre ventas", tipo: "debe", monto: 10000 },
+            { cuenta: "Clientes", tipo: "haber", monto: 10000 }
         ]
     },
     {
         numero: 5,
-        fecha: "2024-01-12",
+        fecha: "2024-01-21",
         descripcion: "Compra de mercancía a crédito.",
         lineas: [
-            { cuenta: "Compras", tipo: "debe", monto: 350000 },
-            { cuenta: "Proveedores", tipo: "haber", monto: 350000 }
+            { cuenta: "Compras", tipo: "debe", monto: 300000 },
+            { cuenta: "Proveedores", tipo: "haber", monto: 300000 }
         ]
     },
     {
         numero: 6,
-        fecha: "2024-01-15",
+        fecha: "2024-01-24",
         descripcion: "Pago de gastos de compra (flete y seguro) en efectivo.",
         lineas: [
-            { cuenta: "Gastos de compra", tipo: "debe", monto: 20000 },
-            { cuenta: "Caja", tipo: "haber", monto: 20000 }
+            { cuenta: "Gastos de compra", tipo: "debe", monto: 10000 },
+            { cuenta: "Caja", tipo: "haber", monto: 10000 }
         ]
     },
     {
         numero: 7,
-        fecha: "2024-01-18",
+        fecha: "2024-01-26",
         descripcion: "Devolución de mercancía defectuosa al proveedor.",
         lineas: [
-            { cuenta: "Proveedores", tipo: "debe", monto: 60000 },
-            { cuenta: "Devoluciones sobre compras", tipo: "haber", monto: 60000 }
+            { cuenta: "Proveedores", tipo: "debe", monto: 55000 },
+            { cuenta: "Devoluciones sobre compras", tipo: "haber", monto: 55000 }
         ]
     },
     {
         numero: 8,
-        fecha: "2024-01-20",
+        fecha: "2024-01-28",
         descripcion: "Descuento por pronto pago obtenido de un proveedor.",
         lineas: [
-            { cuenta: "Proveedores", tipo: "debe", monto: 4000 },
-            { cuenta: "Descuentos sobre compras", tipo: "haber", monto: 4000 }
+            { cuenta: "Proveedores", tipo: "debe", monto: 5000 },
+            { cuenta: "Descuentos sobre compras", tipo: "haber", monto: 5000 }
         ]
     },
-    {
-        numero: 9,
-        fecha: "2024-01-25",
-        descripcion: "Pago de alquiler del local en efectivo.",
-        lineas: [
-            { cuenta: "Gastos de administración", tipo: "debe", monto: 15000 },
-            { cuenta: "Caja", tipo: "haber", monto: 15000 }
-        ]
-    },
-    {
-        numero: 10,
-        fecha: "2024-01-28",
-        descripcion: "Obtención de préstamo bancario en efectivo.",
-        lineas: [
-            { cuenta: "Caja", tipo: "debe", monto: 100000 },
-            { cuenta: "Préstamo bancario", tipo: "haber", monto: 100000 }
-        ]
-    }
+    // {
+    //     numero: 9,
+    //     fecha: "2024-01-25",
+    //     descripcion: "Pago de alquiler del local en efectivo.",
+    //     lineas: [
+    //         { cuenta: "Gastos de administración", tipo: "debe", monto: 15000 },
+    //         { cuenta: "Caja", tipo: "haber", monto: 15000 }
+    //     ]
+    // },
+    // {
+    //     numero: 10,
+    //     fecha: "2024-01-28",
+    //     descripcion: "Obtención de préstamo bancario en efectivo.",
+    //     lineas: [
+    //         { cuenta: "Caja", tipo: "debe", monto: 100000 },
+    //         { cuenta: "Préstamo bancario", tipo: "haber", monto: 100000 }
+    //     ]
+    // }
 ];
 
 // =============================================================================
