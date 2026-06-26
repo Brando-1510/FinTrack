@@ -291,13 +291,13 @@ function restablecerEjercicio() {
  * Valor del inventario inicial del ejercicio.
  * Se usa en el cálculo del Costo de lo Vendido.
  */
-const inventarioInicial = 800000;
+const inventarioInicial = 500000;
 
 /**
  * Valor del inventario final del ejercicio.
  * Se determina por conteo físico al final del período.
  */
-const inventarioFinal = 600000;
+const inventarioFinal = 720000;
 
 // =============================================================================
 // INICIALIZACIÓN AUTOMÁTICA
