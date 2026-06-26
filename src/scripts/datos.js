@@ -160,7 +160,7 @@ const asientosOriginales = [
         lineas: [
             { cuenta: "Caja", tipo: "debe", monto: 1000000 },
             { cuenta: "Inventario", tipo: "debe", monto: 700000 },
-            { cuenta: "Capital", tipo: "haber", monto: 8000000 }
+            { cuenta: "Capital", tipo: "haber", monto: 800000 }
         ]
     },
     {
