@@ -69,7 +69,7 @@ function inicializarAnimacionesScroll() {
             }
         });
     }, {
-        threshold: 0.16,
+        threshold: 0.10,
         rootMargin: '0px 0px -7% 0px'
     });
 
@@ -152,7 +152,7 @@ function prepararElementosAnimables(elementos) {
             elemento.classList.add('animacion-desde-izquierda');
         }
 
-        const delay = Math.min(indice * 35, 240);
+        const delay = Math.min(indice * 18, 120);
         elemento.style.setProperty('--animacion-delay', delay + 'ms');
     });
 }
