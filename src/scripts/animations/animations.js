@@ -12,6 +12,8 @@
  * - index.html
  * - cuentas.html
  * - movimientos.html
+ * - libros.html
+ * - resultados.html
  */
 
 document.documentElement.classList.add('animaciones-activas');
@@ -70,7 +72,7 @@ function inicializarAnimacionesScroll() {
         });
     }, {
         threshold: 0.10,
-        rootMargin: '0px 0px -7% 0px'
+        rootMargin: '0px 0px 10% 0px'
     });
 
     elementosAnimables.forEach(function (elemento) {
@@ -125,7 +127,40 @@ function obtenerElementosAnimables() {
         '.movimientos-table-card__header',
         '.movimientos-table-wrapper',
         '.movimientos-empty-state',
-        '#contenedor-lineas > *'
+        '#contenedor-lineas > *',
+
+        /* LIBROS */
+        '.libros-hero',
+        '.libros-tabs-card',
+        '.libros-tab-section:not(.oculto)',
+        '.libros-card',
+        '.libros-summary-card',
+        '.libros-footer',
+        '.libros-hero__content',
+        '.libros-hero__panel',
+        '.libros-section-header',
+        '.libros-section-text',
+        '.libros-table-wrapper',
+        '.libros-filter__select',
+        '.libros-empty-state',
+        '.esquema-mayor',
+
+        /* RESULTADOS */
+        '.resultados-hero',
+        '.resultados-layout',
+        '.resultados-card',
+        '.resultados-footer',
+        '.resultados-hero__content',
+        '.resultados-hero__panel',
+        '.resultados-section-header',
+        '.resultados-section-text',
+        '.resultados-status',
+        '.resultados-table-wrapper',
+        '.resultados-analysis',
+        '.paso-analisis',
+        '.resultados-charts-grid',
+        '.resultados-chart-card',
+        '.resultados-empty-state'
     ];
 
     return Array.from(document.querySelectorAll(selectores.join(', ')));
@@ -176,7 +211,20 @@ function esSeccionPrincipal(elemento) {
         elemento.classList.contains('movimientos-hero') ||
         elemento.classList.contains('movimientos-layout') ||
         elemento.classList.contains('movimientos-card') ||
-        elemento.classList.contains('movimientos-footer')
+        elemento.classList.contains('movimientos-footer') ||
+
+        elemento.classList.contains('libros-hero') ||
+        elemento.classList.contains('libros-tabs-card') ||
+        elemento.classList.contains('libros-card') ||
+        elemento.classList.contains('libros-summary-card') ||
+        elemento.classList.contains('libros-footer') ||
+
+        elemento.classList.contains('resultados-hero') ||
+        elemento.classList.contains('resultados-layout') ||
+        elemento.classList.contains('resultados-card') ||
+        elemento.classList.contains('resultados-analysis') ||
+        elemento.classList.contains('resultados-charts-grid') ||
+        elemento.classList.contains('resultados-footer')
     );
 }
 
